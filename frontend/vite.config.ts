@@ -11,7 +11,7 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: {
-          charts: ['plotly.js', 'react-plotly.js'],
+          charts: ['plotly.js-dist-min'],
         },
       },
     },

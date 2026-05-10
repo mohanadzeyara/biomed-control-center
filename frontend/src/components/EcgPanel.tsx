@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useState } from 'react';
-import Plot from 'react-plotly.js';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import Plotly from 'plotly.js-dist-min';
 import { Activity, FileText, RefreshCw, Upload } from 'lucide-react';
 import { analyzeEcg, generateEcg, getEcgHistory } from '../services/api';
 import type { EcgData, EcgHistoryItem } from '../types/models';
@@ -12,6 +12,7 @@ export default function EcgPanel() {
   const [history, setHistory] = useState<EcgHistoryItem[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const chartRef = useRef<HTMLDivElement | null>(null);
 
   async function loadEcg(nextBpm = bpm) {
     setLoading(true);
@@ -104,6 +105,45 @@ export default function EcgPanel() {
     };
   }, [ecg]);
 
+  useEffect(() => {
+    if (!ecg || !chartRef.current) {
+      return;
+    }
+
+    Plotly.react(
+      chartRef.current,
+      [
+        {
+          x: ecg.time,
+          y: ecg.voltage,
+          type: 'scatter',
+          mode: 'lines',
+          line: { color: '#0f766e', width: 2 },
+          name: 'ECG',
+        },
+        {
+          x: peakPoints.x,
+          y: peakPoints.y,
+          type: 'scatter',
+          mode: 'markers',
+          marker: { color: '#e11d48', size: 8 },
+          name: 'R peaks',
+        },
+      ],
+      {
+        autosize: true,
+        height: 360,
+        margin: { l: 42, r: 20, t: 16, b: 40 },
+        paper_bgcolor: 'rgba(0,0,0,0)',
+        plot_bgcolor: '#f8fafc',
+        xaxis: { title: 'Time (s)', gridcolor: '#e2e8f0' },
+        yaxis: { title: 'Voltage (mV)', gridcolor: '#e2e8f0' },
+        legend: { orientation: 'h' },
+      },
+      { responsive: true, displaylogo: false },
+    );
+  }, [ecg, peakPoints.x, peakPoints.y]);
+
   return (
     <section className="wide-panel">
       <div className="section-title">
@@ -186,39 +226,7 @@ export default function EcgPanel() {
             </div>
           </div>
 
-          <Plot
-            data={[
-              {
-                x: ecg.time,
-                y: ecg.voltage,
-                type: 'scatter',
-                mode: 'lines',
-                line: { color: '#0f766e', width: 2 },
-                name: 'ECG',
-              },
-              {
-                x: peakPoints.x,
-                y: peakPoints.y,
-                type: 'scatter',
-                mode: 'markers',
-                marker: { color: '#e11d48', size: 8 },
-                name: 'R peaks',
-              },
-            ]}
-            layout={{
-              autosize: true,
-              height: 360,
-              margin: { l: 42, r: 20, t: 16, b: 40 },
-              paper_bgcolor: 'rgba(0,0,0,0)',
-              plot_bgcolor: '#f8fafc',
-              xaxis: { title: 'Time (s)', gridcolor: '#e2e8f0' },
-              yaxis: { title: 'Voltage (mV)', gridcolor: '#e2e8f0' },
-              legend: { orientation: 'h' },
-            }}
-            config={{ responsive: true, displaylogo: false }}
-            className="plot"
-            useResizeHandler
-          />
+          <div ref={chartRef} className="plot" />
 
           <div className="report-panel">
             <div>
