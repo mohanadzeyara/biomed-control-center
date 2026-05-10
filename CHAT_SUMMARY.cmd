@@ -32,6 +32,8 @@ echo - Fixed CORS so local frontend preview on port 4173 can call backend on por
 echo - Added Vite env typing file.
 echo - Split Plotly/chart code into a separate lazy-loaded chunk so the dashboard opens faster.
 echo - Fixed GitHub Pages blank screen by switching to browser-safe plotly.js-dist-min instead of the heavier Plotly module build.
+echo - Verified deployed frontend now renders real dashboard content through browser debugging.
+echo - Remaining deployed API errors are expected until backend is hosted; browser fallback data keeps the demo usable.
 echo - Added browser fallback data so a static deployed demo still works if the backend is not hosted yet.
 echo - Added README, ROADMAP, DEPLOYMENT guide, PROJECT_REPORT, and this summary file.
 echo - Created clean zip packages excluding node_modules, .venv, dist, __pycache__, and logs.
