@@ -45,6 +45,9 @@ The frontend includes:
 - ECG generator controls
 - Plotly ECG visualization
 - R peak markers
+- CSV upload and smoothing controls
+- ECG analysis history
+- Printable educational report panel
 - Learning notes section
 - Responsive layout for desktop and mobile
 
@@ -53,6 +56,8 @@ The frontend includes:
 The interface is made to feel like a biomedical control dashboard, not a marketing website. The layout is simple, readable, and focused on useful lab-style information.
 
 I used a calm medical color palette with teal, white, slate, and alert rose/orange colors. The project avoids real diagnosis language and clearly labels the data as fake.
+
+The ECG lab is lazy-loaded so the dashboard opens faster. Plotly is still included for strong biomedical charting, but its heavier chart code is split away from the first dashboard load.
 
 ## Verification
 

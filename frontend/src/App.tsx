@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react';
+import { lazy, Suspense, useEffect, useState } from 'react';
 import { Activity, AlertTriangle, HeartPulse, ServerCog } from 'lucide-react';
 import DeviceCard from './components/DeviceCard';
-import EcgPanel from './components/EcgPanel';
 import SummaryCard from './components/SummaryCard';
 import { getDashboard, getLearningNotes } from './services/api';
 import type { DashboardData, LearningNote } from './types/models';
+
+const EcgPanel = lazy(() => import('./components/EcgPanel'));
 
 export default function App() {
   const [dashboard, setDashboard] = useState<DashboardData | null>(null);
@@ -125,7 +126,9 @@ export default function App() {
         </>
       )}
 
-      <EcgPanel />
+      <Suspense fallback={<section className="wide-panel">Loading ECG lab...</section>}>
+        <EcgPanel />
+      </Suspense>
 
       <section className="learning-strip">
         {notes.map((note) => (

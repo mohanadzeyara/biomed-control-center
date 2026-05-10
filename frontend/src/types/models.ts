@@ -39,13 +39,33 @@ export type DashboardData = {
 };
 
 export type EcgData = {
+  name?: string;
   sample_rate: number;
   duration: number;
   heart_rate: number;
   time: number[];
   voltage: number[];
+  raw_voltage?: number[];
   r_peaks: number[];
+  noise_score?: number;
+  filter_used?: boolean;
   notes: string;
+};
+
+export type EcgAnalysisRequest = {
+  name: string;
+  sample_rate: number;
+  apply_filter: boolean;
+  time: number[];
+  voltage: number[];
+};
+
+export type EcgHistoryItem = {
+  id: string;
+  name: string;
+  heart_rate: number;
+  duration: number;
+  filter_used: boolean;
 };
 
 export type LearningNote = {

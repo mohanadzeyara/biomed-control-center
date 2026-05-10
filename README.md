@@ -11,6 +11,14 @@ Phase 1 includes:
 - Simple heart-rate calculation from generated R peaks
 - Learning notes for biomedical engineering concepts
 
+Phase 2 additions now included:
+
+- CSV ECG upload with time and voltage columns
+- Optional smoothing filter for uploaded ECG data
+- Basic R-peak detection for generated or uploaded ECG
+- In-memory ECG analysis history
+- Printable ECG report from the browser
+
 ## Tech Stack
 
 - Frontend: React, TypeScript, Tailwind CSS, Plotly.js
@@ -55,6 +63,19 @@ npm run dev
 ```
 
 Open the frontend URL shown by Vite. The backend should be running at `http://localhost:8000`.
+
+## CSV Upload Format
+
+The ECG upload accepts `.csv` or `.txt` files with two columns:
+
+```csv
+time,voltage
+0,0.01
+0.004,0.03
+0.008,0.08
+```
+
+You can test it with `samples/demo_ecg.csv`.
 
 ## Safety Note
 

@@ -11,12 +11,14 @@
 
 ## Phase 2
 
-- Add CSV upload for ECG samples
-- Add ECG filtering controls
-- Add stronger R-peak detection
-- Store analysis history in MongoDB
-- Add threshold-based alert rules
-- Add maintenance log editing
+- CSV upload for ECG samples
+- ECG smoothing controls
+- Basic uploaded-signal R-peak detection
+- In-memory analysis history
+- Printable report panel
+- Later: store analysis history in MongoDB
+- Later: add threshold-based alert rules
+- Later: add maintenance log editing
 
 ## Phase 3
 

@@ -1,12 +1,15 @@
 import { useEffect, useMemo, useState } from 'react';
 import Plot from 'react-plotly.js';
-import { Activity, RefreshCw } from 'lucide-react';
-import { generateEcg } from '../services/api';
-import type { EcgData } from '../types/models';
+import { Activity, FileText, RefreshCw, Upload } from 'lucide-react';
+import { analyzeEcg, generateEcg, getEcgHistory } from '../services/api';
+import type { EcgData, EcgHistoryItem } from '../types/models';
 
 export default function EcgPanel() {
   const [bpm, setBpm] = useState(74);
+  const [sampleRate, setSampleRate] = useState(250);
+  const [applyFilter, setApplyFilter] = useState(true);
   const [ecg, setEcg] = useState<EcgData | null>(null);
+  const [history, setHistory] = useState<EcgHistoryItem[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -17,6 +20,7 @@ export default function EcgPanel() {
     try {
       const result = await generateEcg(nextBpm);
       setEcg(result);
+      refreshHistory();
     } catch {
       setError('Could not load ECG data. Check that the backend is running.');
     } finally {
@@ -26,7 +30,68 @@ export default function EcgPanel() {
 
   useEffect(() => {
     loadEcg(74);
+    refreshHistory();
   }, []);
+
+  async function refreshHistory() {
+    try {
+      setHistory(await getEcgHistory());
+    } catch {
+      setHistory([]);
+    }
+  }
+
+  function parseCsv(text: string) {
+    const lines = text.split(/\r?\n/).map((line) => line.trim()).filter(Boolean);
+    const time: number[] = [];
+    const voltage: number[] = [];
+
+    for (const line of lines) {
+      const parts = line.split(/[;,]/).map((part) => Number(part.trim()));
+      if (parts.length >= 2 && Number.isFinite(parts[0]) && Number.isFinite(parts[1])) {
+        time.push(parts[0]);
+        voltage.push(parts[1]);
+      }
+    }
+
+    return { time, voltage };
+  }
+
+  async function handleCsvUpload(file: File | null) {
+    if (!file) {
+      return;
+    }
+
+    setLoading(true);
+    setError('');
+
+    try {
+      const text = await file.text();
+      const parsed = parseCsv(text);
+
+      if (parsed.voltage.length < 20) {
+        throw new Error('Need at least 20 numeric rows with time and voltage columns.');
+      }
+
+      const result = await analyzeEcg({
+        name: file.name.replace(/\.[^.]+$/, ''),
+        sample_rate: sampleRate,
+        apply_filter: applyFilter,
+        time: parsed.time,
+        voltage: parsed.voltage,
+      });
+      setEcg(result);
+      refreshHistory();
+    } catch (uploadError) {
+      setError(uploadError instanceof Error ? uploadError.message : 'Could not analyze CSV file.');
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  function printReport() {
+    window.print();
+  }
 
   const peakPoints = useMemo(() => {
     if (!ecg) {
@@ -60,10 +125,41 @@ export default function EcgPanel() {
             onChange={(event) => setBpm(Number(event.target.value))}
           />
         </label>
+        <label>
+          CSV sample rate
+          <input
+            type="number"
+            min="50"
+            max="1000"
+            value={sampleRate}
+            onChange={(event) => setSampleRate(Number(event.target.value))}
+          />
+        </label>
+        <label className="check-row">
+          <input
+            type="checkbox"
+            checked={applyFilter}
+            onChange={(event) => setApplyFilter(event.target.checked)}
+          />
+          Smooth uploaded CSV
+        </label>
         <strong>{bpm} bpm</strong>
         <button onClick={() => loadEcg()} disabled={loading}>
           <RefreshCw size={17} />
           Generate
+        </button>
+        <label className="upload-button">
+          <Upload size={17} />
+          Upload CSV
+          <input
+            type="file"
+            accept=".csv,.txt"
+            onChange={(event) => handleCsvUpload(event.target.files?.[0] || null)}
+          />
+        </label>
+        <button onClick={printReport} disabled={!ecg}>
+          <FileText size={17} />
+          Report
         </button>
       </div>
 
@@ -83,6 +179,10 @@ export default function EcgPanel() {
             <div>
               <span>R peaks found</span>
               <strong>{ecg.r_peaks.length}</strong>
+            </div>
+            <div>
+              <span>Filter</span>
+              <strong>{ecg.filter_used ? 'On' : 'Off'}</strong>
             </div>
           </div>
 
@@ -119,8 +219,36 @@ export default function EcgPanel() {
             className="plot"
             useResizeHandler
           />
+
+          <div className="report-panel">
+            <div>
+              <p className="label">ECG Report Generator</p>
+              <h3>{ecg.name || 'Generated ECG Demo'}</h3>
+            </div>
+            <p>
+              Heart rate: <strong>{ecg.heart_rate} bpm</strong>. Duration: <strong>{ecg.duration}s</strong>.
+              R peaks: <strong>{ecg.r_peaks.length}</strong>. This report is for biomedical education only.
+            </p>
+          </div>
         </>
       )}
+
+      <div className="history-panel">
+        <div>
+          <p className="label">Analysis history</p>
+          <h3>Latest ECG runs</h3>
+        </div>
+        {history.length === 0 ? (
+          <span>No saved runs yet.</span>
+        ) : (
+          history.slice(0, 5).map((item) => (
+            <article key={item.id}>
+              <strong>{item.name}</strong>
+              <span>{item.heart_rate || 'n/a'} bpm - {item.duration}s - filter {item.filter_used ? 'on' : 'off'}</span>
+            </article>
+          ))
+        )}
+      </div>
     </section>
   );
 }

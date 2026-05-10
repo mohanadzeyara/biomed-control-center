@@ -1,4 +1,4 @@
-import type { DashboardData, EcgData, LearningNote } from '../types/models';
+import type { DashboardData, EcgAnalysisRequest, EcgData, EcgHistoryItem, LearningNote } from '../types/models';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
@@ -22,4 +22,22 @@ export function getLearningNotes() {
 
 export function generateEcg(bpm: number, seconds = 8) {
   return getJson<EcgData>(`/api/ecg/generate?bpm=${bpm}&seconds=${seconds}`);
+}
+
+export async function analyzeEcg(payload: EcgAnalysisRequest) {
+  const response = await fetch(`${API_URL}/api/ecg/analyze`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+
+  if (!response.ok) {
+    throw new Error(`Analysis failed: ${response.status}`);
+  }
+
+  return response.json() as Promise<EcgData>;
+}
+
+export function getEcgHistory() {
+  return getJson<EcgHistoryItem[]>('/api/ecg/history');
 }

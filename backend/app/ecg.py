@@ -2,6 +2,15 @@ import math
 from typing import Any
 
 import numpy as np
+from pydantic import BaseModel
+
+
+class EcgAnalyzeRequest(BaseModel):
+    time: list[float]
+    voltage: list[float]
+    sample_rate: int = 250
+    apply_filter: bool = True
+    name: str = "Uploaded ECG"
 
 
 def generate_ecg(seconds: int = 8, sample_rate: int = 250, bpm: int = 74) -> dict[str, Any]:
@@ -42,4 +51,71 @@ def generate_ecg(seconds: int = 8, sample_rate: int = 250, bpm: int = 74) -> dic
         "voltage": [round(float(x), 4) for x in signal],
         "r_peaks": r_peaks,
         "notes": "Synthetic ECG for biomedical engineering education only.",
+    }
+
+
+def smooth_signal(values: np.ndarray, window: int = 7) -> np.ndarray:
+    if len(values) < window:
+        return values
+
+    kernel = np.ones(window) / window
+    return np.convolve(values, kernel, mode="same")
+
+
+def detect_r_peaks(values: np.ndarray, sample_rate: int) -> list[int]:
+    if len(values) < 3:
+        return []
+
+    threshold = float(np.mean(values) + 0.65 * np.std(values))
+    min_distance = max(1, int(sample_rate * 0.28))
+    peaks: list[int] = []
+    last_peak = -min_distance
+
+    for index in range(1, len(values) - 1):
+        is_peak = values[index] > values[index - 1] and values[index] > values[index + 1]
+        far_enough = index - last_peak >= min_distance
+
+        if is_peak and far_enough and values[index] > threshold:
+            peaks.append(index)
+            last_peak = index
+
+    return peaks
+
+
+def analyze_ecg(payload: EcgAnalyzeRequest) -> dict[str, Any]:
+    sample_rate = max(50, min(payload.sample_rate, 1000))
+    time = np.array(payload.time, dtype=float)
+    voltage = np.array(payload.voltage, dtype=float)
+
+    if len(voltage) != len(time):
+        raise ValueError("Time and voltage arrays must have the same length.")
+
+    if len(voltage) < 20:
+        raise ValueError("ECG data needs at least 20 samples.")
+
+    clean_voltage = smooth_signal(voltage) if payload.apply_filter else voltage
+    r_peaks = detect_r_peaks(clean_voltage, sample_rate)
+    heart_rate = 0
+
+    if len(r_peaks) > 1:
+        peak_times = np.array([time[index] for index in r_peaks])
+        average_gap = float(np.mean(np.diff(peak_times)))
+        if average_gap > 0:
+            heart_rate = round(60 / average_gap)
+
+    duration = round(float(time[-1] - time[0]), 3)
+    noise_score = round(float(np.std(voltage - clean_voltage)), 4)
+
+    return {
+        "name": payload.name,
+        "sample_rate": sample_rate,
+        "duration": duration,
+        "heart_rate": heart_rate,
+        "time": [round(float(x), 4) for x in time],
+        "voltage": [round(float(x), 4) for x in clean_voltage],
+        "raw_voltage": [round(float(x), 4) for x in voltage],
+        "r_peaks": r_peaks,
+        "noise_score": noise_score,
+        "filter_used": payload.apply_filter,
+        "notes": "Educational ECG analysis only. Not for diagnosis.",
     }
