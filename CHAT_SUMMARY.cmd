@@ -18,6 +18,12 @@ echo - Main concept changed from only a fake-data dashboard into an interactive 
 echo - Added device library for ECG, CT, ultrasound, X-ray, MRI, and infusion pump.
 echo - Added movable/clickable 3D teaching models using Three.js.
 echo - Added part explanations for each medical device.
+echo - Added electrotechnics explanations for sensors, amplifiers, ADCs, filters, motors, high voltage, and power electronics.
+echo - Added separate device pages using hash routes like #/device/ecg.
+echo - Removed the old Supporting module / Control Center Preview section.
+echo - Added English/German language toggle.
+echo - Added dark mode toggle.
+echo - Added animated teaching clips that explain how each device works.
 echo - Added before/after signal and image processing teaching demos.
 echo - FastAPI backend with generated demo data.
 echo - React TypeScript frontend with responsive dashboard UI.

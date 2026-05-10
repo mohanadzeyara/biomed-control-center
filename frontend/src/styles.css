@@ -5,8 +5,29 @@
 :root {
   color: #10201f;
   background: #eef5f3;
+  --page-bg: #eef5f3;
+  --panel-bg: rgba(255, 255, 255, 0.88);
+  --panel-solid: #ffffff;
+  --text: #10201f;
+  --muted: #64748b;
+  --border: rgba(148, 163, 184, 0.45);
+  --canvas-bg: #f8fafc;
+  --soft: #f8fafc;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
+}
+
+:root[data-theme='dark'] {
+  color: #e2e8f0;
+  background: #0f172a;
+  --page-bg: #0f172a;
+  --panel-bg: rgba(15, 23, 42, 0.92);
+  --panel-solid: #111827;
+  --text: #e2e8f0;
+  --muted: #94a3b8;
+  --border: rgba(148, 163, 184, 0.28);
+  --canvas-bg: #111827;
+  --soft: #1e293b;
 }
 
 * {
@@ -20,7 +41,8 @@ body {
   background:
     linear-gradient(120deg, rgba(15, 118, 110, 0.12), transparent 36%),
     linear-gradient(220deg, rgba(225, 29, 72, 0.08), transparent 32%),
-    #eef5f3;
+    var(--page-bg);
+  color: var(--text);
 }
 
 .explorer-hero {
@@ -687,5 +709,206 @@ h3 {
 
   .device-canvas {
     height: 340px;
+  }
+}
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 0;
+  backdrop-filter: blur(14px);
+}
+
+.brand {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.brand span {
+  color: #0f766e;
+  font-weight: 900;
+}
+
+.top-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.top-actions button,
+.back-link {
+  min-height: 38px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0 12px;
+  background: var(--panel-bg);
+  color: var(--text);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.hero-copy p:last-child,
+.device-page-hero p:last-child,
+.lesson-card p,
+.lesson-card li,
+.process-demo p,
+.library-card small,
+.canvas-hint,
+.lesson-panel small {
+  color: var(--muted);
+}
+
+.hero-stats,
+.library-card,
+.model-panel,
+.lesson-panel,
+.lesson-card,
+.process-demo,
+.summary-card,
+.panel,
+.wide-panel,
+.device-card,
+.learning-strip article {
+  border-color: var(--border);
+  background: var(--panel-bg);
+}
+
+.library-card {
+  color: var(--text);
+  text-decoration: none;
+}
+
+.library-card span,
+.label {
+  color: var(--muted);
+}
+
+.hero-stats span,
+.lesson-panel p,
+.before-after span,
+.part-buttons button {
+  color: var(--text);
+}
+
+.device-canvas {
+  background: var(--canvas-bg);
+  border-color: var(--border);
+}
+
+.part-buttons button {
+  background: var(--panel-solid);
+  border-color: var(--border);
+}
+
+.back-link {
+  margin: 18px 0 14px;
+}
+
+.device-page-hero {
+  display: grid;
+  gap: 14px;
+  padding: 28px 0;
+}
+
+.device-page-hero p:last-child {
+  max-width: 960px;
+  line-height: 1.7;
+  font-size: 1.04rem;
+}
+
+.device-page {
+  grid-template-columns: minmax(0, 1.25fr) minmax(360px, 0.75fr);
+}
+
+.electro-box {
+  display: flex;
+  gap: 12px;
+  padding: 14px;
+  border-radius: 8px;
+  background: var(--soft);
+  border: 1px solid var(--border);
+}
+
+.electro-box div {
+  display: grid;
+  gap: 5px;
+}
+
+.electro-box span {
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.clip-strip {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  overflow: hidden;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: linear-gradient(90deg, rgba(20, 184, 166, 0.08), rgba(56, 189, 248, 0.08));
+}
+
+.clip-step {
+  min-height: 92px;
+  display: grid;
+  gap: 8px;
+  align-content: center;
+  justify-items: center;
+  text-align: center;
+  border-radius: 8px;
+  background: var(--panel-bg);
+  border: 1px solid var(--border);
+}
+
+.clip-step span {
+  width: 28px;
+  height: 28px;
+  display: inline-grid;
+  place-items: center;
+  border-radius: 999px;
+  background: #0f766e;
+  color: #fff;
+  font-weight: 900;
+}
+
+.moving-pulse {
+  position: absolute;
+  left: 20px;
+  bottom: 10px;
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  background: #e11d48;
+  box-shadow: 0 0 20px rgba(225, 29, 72, 0.65);
+  animation: movePulse 4.8s linear infinite;
+}
+
+@keyframes movePulse {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(min(980px, calc(100vw - 90px)));
+  }
+}
+
+@media (max-width: 920px) {
+  .device-page,
+  .clip-strip {
+    grid-template-columns: 1fr;
   }
 }

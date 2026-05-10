@@ -42,6 +42,11 @@ The frontend includes:
 - Device library for ECG, CT, ultrasound, X-ray, MRI, and infusion pump
 - Clickable/movable 3D teaching models built with Three.js
 - Part-by-part explanations for device subsystems
+- Separate pages for each device with more room for lessons
+- English/German language switch
+- Dark mode
+- Electrotechnics explanations for each important part
+- Animated workflow clips for how the device is used or how the signal/image is produced
 - Before/after processing demos for signals and images
 - Dashboard summary cards
 - Device digital twin overview
@@ -59,6 +64,8 @@ The frontend includes:
 ## Design Choices
 
 The interface is now more like an interactive biomedical engineering learning lab than a dashboard. The first screen teaches devices directly, and the control-center dashboard is kept lower on the page as a secondary module.
+
+The old control-center preview has now been removed from the main experience. The app focuses on device teaching pages because that is clearer and more useful for a second-semester biomedical engineering student.
 
 I used a calm medical color palette with teal, white, slate, and alert rose/orange colors. The project avoids real diagnosis language and clearly labels the data as fake.
 

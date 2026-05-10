@@ -19,6 +19,11 @@ Each device section includes:
 
 - A movable 3D model
 - Clickable parts with functions and engineering details
+- Electrotechnics links for sensors, amplifiers, ADCs, motors, filters, and power electronics
+- Separate device pages using browser routes such as `#/device/ecg`
+- English/German language toggle
+- Light/dark mode toggle
+- Animated teaching clips showing the device workflow
 - A signal or image processing demonstration
 - Workflow explanation from acquisition to display
 - Educational safety wording, with no diagnosis claims
