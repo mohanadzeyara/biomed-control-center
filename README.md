@@ -2,6 +2,10 @@
 
 BioMed Control Center is an educational full-stack biomedical engineering dashboard. It uses fake demo data only and is not a medical diagnosis tool.
 
+Live demo: https://mohanadzeyara.github.io/biomed-control-center/
+
+![BioMed Control Center dashboard](docs/screenshots/dashboard.png)
+
 Phase 1 includes:
 
 - Dashboard overview with device status, alerts, and recent analysis

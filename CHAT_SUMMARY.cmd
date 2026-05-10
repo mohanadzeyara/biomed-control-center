@@ -55,6 +55,7 @@ echo - GitHub repo created and pushed: https://github.com/mohanadzeyara/biomed-c
 echo - GitHub Pages frontend deployed: https://mohanadzeyara.github.io/biomed-control-center/
 echo - GitHub Pages status checked: live URL returned HTTP 200 OK.
 echo - Root render.yaml added so backend can be deployed on Render from the GitHub repo.
+echo - Deployed frontend screenshot captured at docs\screenshots\dashboard.png and added to README.
 echo - Backend hosting still needs Render account/browser authorization.
 echo.
 echo Computer changes made:
