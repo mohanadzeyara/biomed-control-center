@@ -31,6 +31,7 @@ echo Project improvements already made:
 echo - Fixed CORS so local frontend preview on port 4173 can call backend on port 8000.
 echo - Added Vite env typing file.
 echo - Split Plotly/chart code into a separate lazy-loaded chunk so the dashboard opens faster.
+echo - Added browser fallback data so a static deployed demo still works if the backend is not hosted yet.
 echo - Added README, ROADMAP, DEPLOYMENT guide, PROJECT_REPORT, and this summary file.
 echo - Created clean zip packages excluding node_modules, .venv, dist, __pycache__, and logs.
 echo - Created local Git repository and commits.
@@ -50,7 +51,8 @@ echo Git/GitHub status:
 echo - Git for Windows installed.
 echo - Portable GitHub CLI installed at C:\Users\ASUS\Documents\Codex\tools\bin\gh.exe
 echo - GitHub account logged in: mohanadzeyara
-echo - Next deployment work after this summary: create/push GitHub repo, then deploy.
+echo - GitHub repo created and pushed: https://github.com/mohanadzeyara/biomed-control-center
+echo - Next deployment work after this summary: publish GitHub Pages frontend, then continue backend hosting if possible.
 echo.
 echo Computer changes made:
 echo - Git for Windows installed.

@@ -64,6 +64,8 @@ npm run dev
 
 Open the frontend URL shown by Vite. The backend should be running at `http://localhost:8000`.
 
+The deployed static demo can also run with browser fallback data if the FastAPI backend is not deployed yet.
+
 ## CSV Upload Format
 
 The ECG upload accepts `.csv` or `.txt` files with two columns:
