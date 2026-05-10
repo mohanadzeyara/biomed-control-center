@@ -1,10 +1,27 @@
-# BioMed Control Center
+# MedTech Device Explorer
 
-BioMed Control Center is an educational full-stack biomedical engineering dashboard. It uses fake demo data only and is not a medical diagnosis tool.
+MedTech Device Explorer is an educational biomedical engineering website for learning how medical devices work. It uses clickable 3D teaching models, device-part explanations, signal and image processing demos, and fake/demo data only.
 
 Live demo: https://mohanadzeyara.github.io/biomed-control-center/
 
 ![BioMed Control Center dashboard](docs/screenshots/dashboard.png)
+
+Main learning sections:
+
+- ECG Monitor
+- CT Scanner
+- Ultrasound System
+- X-ray System
+- MRI Scanner
+- Infusion Pump
+
+Each device section includes:
+
+- A movable 3D model
+- Clickable parts with functions and engineering details
+- A signal or image processing demonstration
+- Workflow explanation from acquisition to display
+- Educational safety wording, with no diagnosis claims
 
 Phase 1 includes:
 

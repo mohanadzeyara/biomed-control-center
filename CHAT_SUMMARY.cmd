@@ -12,7 +12,13 @@ echo - Preferred stack: React TypeScript Tailwind Plotly frontend, FastAPI Pytho
 echo - Main modules: device dashboard, digital twin, ECG analysis, reports, image annotation, learning mode.
 echo.
 echo What has been built:
+echo - Project renamed in the UI to MedTech Device Explorer.
 echo - Full-stack project folder: biomed-control-center
+echo - Main concept changed from only a fake-data dashboard into an interactive teaching website.
+echo - Added device library for ECG, CT, ultrasound, X-ray, MRI, and infusion pump.
+echo - Added movable/clickable 3D teaching models using Three.js.
+echo - Added part explanations for each medical device.
+echo - Added before/after signal and image processing teaching demos.
 echo - FastAPI backend with generated demo data.
 echo - React TypeScript frontend with responsive dashboard UI.
 echo - Device digital twin overview with health score, battery, service date, status.
@@ -34,6 +40,7 @@ echo - Split Plotly/chart code into a separate lazy-loaded chunk so the dashboar
 echo - Fixed GitHub Pages blank screen by switching to browser-safe plotly.js-dist-min instead of the heavier Plotly module build.
 echo - Verified deployed frontend now renders real dashboard content through browser debugging.
 echo - Remaining deployed API errors are expected until backend is hosted; browser fallback data keeps the demo usable.
+echo - Redesigned the project into MedTech Device Explorer based on the user's new idea.
 echo - Added browser fallback data so a static deployed demo still works if the backend is not hosted yet.
 echo - Added README, ROADMAP, DEPLOYMENT guide, PROJECT_REPORT, and this summary file.
 echo - Created clean zip packages excluding node_modules, .venv, dist, __pycache__, and logs.

@@ -23,6 +23,287 @@ body {
     #eef5f3;
 }
 
+.explorer-hero {
+  min-height: 420px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  gap: 28px;
+  align-items: end;
+  padding: 42px 0 28px;
+}
+
+.hero-copy {
+  display: grid;
+  gap: 18px;
+}
+
+.hero-copy p:last-child {
+  max-width: 760px;
+  color: #475569;
+  font-size: 1.08rem;
+  line-height: 1.7;
+}
+
+.hero-stats {
+  display: grid;
+  gap: 10px;
+  padding: 18px;
+  border-radius: 8px;
+  border: 1px solid rgba(148, 163, 184, 0.45);
+  background: rgba(255, 255, 255, 0.86);
+}
+
+.hero-stats span {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #334155;
+  font-weight: 700;
+}
+
+.device-library {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.library-card {
+  min-height: 144px;
+  display: grid;
+  align-content: start;
+  gap: 8px;
+  border: 1px solid rgba(148, 163, 184, 0.55);
+  border-radius: 8px;
+  padding: 14px;
+  background: rgba(255, 255, 255, 0.76);
+  color: #10201f;
+  text-align: left;
+  cursor: pointer;
+}
+
+.library-card.active {
+  border-color: #0f766e;
+  background: #ecfdf5;
+  box-shadow: 0 16px 38px rgba(15, 118, 110, 0.14);
+}
+
+.library-card span {
+  color: #64748b;
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.library-card strong {
+  font-size: 1.02rem;
+}
+
+.library-card small,
+.canvas-hint,
+.lesson-panel small {
+  color: #64748b;
+  line-height: 1.5;
+}
+
+.device-workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  gap: 18px;
+  margin-bottom: 18px;
+}
+
+.model-panel,
+.lesson-panel,
+.lesson-card,
+.process-demo,
+.control-center {
+  border: 1px solid rgba(148, 163, 184, 0.45);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.86);
+  box-shadow: 0 18px 50px rgba(15, 23, 42, 0.07);
+}
+
+.model-panel,
+.lesson-panel,
+.lesson-card,
+.process-demo,
+.control-center {
+  padding: 18px;
+}
+
+.device-canvas {
+  width: 100%;
+  height: 460px;
+  display: block;
+  margin: 16px 0 8px;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  touch-action: none;
+}
+
+.lesson-panel {
+  display: grid;
+  gap: 16px;
+  align-content: start;
+}
+
+.lesson-panel p {
+  color: #334155;
+  line-height: 1.65;
+  margin: 10px 0;
+}
+
+.part-buttons {
+  display: grid;
+  gap: 8px;
+}
+
+.part-buttons button {
+  min-height: 40px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  background: #fff;
+  color: #334155;
+  cursor: pointer;
+}
+
+.part-buttons button.active {
+  background: #0f766e;
+  border-color: #0f766e;
+  color: #fff;
+}
+
+.learning-grid {
+  display: grid;
+  grid-template-columns: 0.9fr 1.2fr 0.9fr;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.lesson-card {
+  display: grid;
+  gap: 12px;
+}
+
+.lesson-card p,
+.lesson-card li,
+.process-demo p {
+  color: #475569;
+  line-height: 1.65;
+}
+
+.lesson-card ol {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.lesson-card li + li {
+  margin-top: 8px;
+}
+
+.process-demo {
+  display: grid;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.before-after {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.before-after span {
+  display: block;
+  margin-bottom: 8px;
+  color: #334155;
+  font-weight: 800;
+}
+
+.image-sim {
+  height: 230px;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  background-color: #0f172a;
+}
+
+.before-after.ecg .image-sim {
+  background:
+    linear-gradient(90deg, transparent 0 8%, #0f766e 8% 9%, transparent 9% 20%, #0f766e 20% 21%, transparent 21% 33%, #e11d48 33% 34%, transparent 34% 48%, #0f766e 48% 49%, transparent 49% 60%, #e11d48 60% 61%, transparent 61% 100%),
+    repeating-linear-gradient(0deg, #f8fafc 0 18px, #dbeafe 18px 19px),
+    repeating-linear-gradient(90deg, transparent 0 18px, rgba(15, 118, 110, 0.2) 18px 19px);
+}
+
+.before-after.ct .before,
+.before-after.mri .before {
+  background: radial-gradient(circle at center, #94a3b8 0 18%, #334155 19% 32%, #111827 33% 100%);
+  filter: blur(3px) contrast(0.75);
+}
+
+.before-after.ct .after,
+.before-after.mri .after {
+  background: radial-gradient(circle at center, #e2e8f0 0 14%, #64748b 15% 28%, #1f2937 29% 43%, #020617 44% 100%);
+  filter: contrast(1.35);
+}
+
+.before-after.ultrasound .before {
+  background:
+    radial-gradient(ellipse at 50% 85%, rgba(20, 184, 166, 0.38), transparent 45%),
+    repeating-radial-gradient(circle at 50% 100%, #0f172a 0 8px, #1e293b 9px 12px);
+  filter: contrast(0.85);
+}
+
+.before-after.ultrasound .after {
+  background:
+    radial-gradient(ellipse at 50% 85%, rgba(45, 212, 191, 0.55), transparent 45%),
+    repeating-radial-gradient(circle at 50% 100%, #0f172a 0 10px, #334155 11px 12px);
+  filter: contrast(1.25) brightness(1.12);
+}
+
+.before-after.xray .before {
+  background: linear-gradient(90deg, #111827, #64748b 45%, #0f172a);
+  filter: contrast(0.7) blur(1px);
+}
+
+.before-after.xray .after {
+  background: linear-gradient(90deg, #020617, #e2e8f0 48%, #334155);
+  filter: contrast(1.45) brightness(1.1);
+}
+
+.before-after.pump .before,
+.before-after.ventilator .before,
+.before-after.defib .before {
+  background: repeating-linear-gradient(90deg, #f8fafc 0 20px, #dbeafe 21px 22px), linear-gradient(#ef4444, #ef4444);
+  filter: saturate(0.75);
+}
+
+.before-after.pump .after,
+.before-after.ventilator .after,
+.before-after.defib .after {
+  background: repeating-linear-gradient(90deg, #f8fafc 0 20px, #dbeafe 21px 22px), linear-gradient(#0f766e, #0f766e);
+}
+
+.filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.filter-row span {
+  padding: 8px 10px;
+  border-radius: 999px;
+  background: #ecfeff;
+  color: #155e75;
+  font-weight: 800;
+  font-size: 0.82rem;
+}
+
+.control-center {
+  margin-bottom: 18px;
+}
+
 button,
 input {
   font: inherit;
@@ -366,10 +647,18 @@ h3 {
 }
 
 @media (max-width: 920px) {
+  .explorer-hero,
+  .device-workspace,
+  .learning-grid,
   .summary-grid,
   .layout-grid,
-  .learning-strip {
+  .learning-strip,
+  .before-after {
     grid-template-columns: 1fr;
+  }
+
+  .device-library {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .device-meta {
@@ -390,5 +679,13 @@ h3 {
 
   .summary-card {
     min-height: 104px;
+  }
+
+  .device-library {
+    grid-template-columns: 1fr;
+  }
+
+  .device-canvas {
+    height: 340px;
   }
 }

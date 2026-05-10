@@ -2,9 +2,9 @@
 
 ## What Was Built
 
-I built Phase 1 of BioMed Control Center as a full-stack educational biomedical engineering dashboard.
+I built MedTech Device Explorer as a full-stack educational biomedical engineering website.
 
-The project has a FastAPI backend and a React TypeScript frontend. It uses fake/demo data only, so it is suitable for a CV, class demo, or portfolio project without using real patient information.
+The project now focuses on teaching how medical devices work through interactive 3D models, part explanations, safe simulations, and signal/image processing demos. It still keeps the earlier BioMed Control Center dashboard as a supporting module.
 
 ## Backend
 
@@ -38,6 +38,11 @@ Main files:
 
 The frontend includes:
 
+- MedTech Device Explorer landing experience
+- Device library for ECG, CT, ultrasound, X-ray, MRI, and infusion pump
+- Clickable/movable 3D teaching models built with Three.js
+- Part-by-part explanations for device subsystems
+- Before/after processing demos for signals and images
 - Dashboard summary cards
 - Device digital twin overview
 - Alerts panel
@@ -53,7 +58,7 @@ The frontend includes:
 
 ## Design Choices
 
-The interface is made to feel like a biomedical control dashboard, not a marketing website. The layout is simple, readable, and focused on useful lab-style information.
+The interface is now more like an interactive biomedical engineering learning lab than a dashboard. The first screen teaches devices directly, and the control-center dashboard is kept lower on the page as a secondary module.
 
 I used a calm medical color palette with teal, white, slate, and alert rose/orange colors. The project avoids real diagnosis language and clearly labels the data as fake.
 

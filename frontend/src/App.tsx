@@ -1,29 +1,23 @@
-import { lazy, Suspense, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Activity, AlertTriangle, HeartPulse, ServerCog } from 'lucide-react';
+import DeviceExplorer from './components/DeviceExplorer';
 import DeviceCard from './components/DeviceCard';
 import SummaryCard from './components/SummaryCard';
 import { getDashboard, getLearningNotes } from './services/api';
 import type { DashboardData, LearningNote } from './types/models';
 
-const EcgPanel = lazy(() => import('./components/EcgPanel'));
-
 export default function App() {
   const [dashboard, setDashboard] = useState<DashboardData | null>(null);
   const [notes, setNotes] = useState<LearningNote[]>([]);
-  const [error, setError] = useState('');
 
   useEffect(() => {
     async function loadData() {
-      try {
-        const [dashboardData, learningData] = await Promise.all([
-          getDashboard(),
-          getLearningNotes(),
-        ]);
-        setDashboard(dashboardData);
-        setNotes(learningData);
-      } catch {
-        setError('Backend is not reachable. Start FastAPI on port 8000.');
-      }
+      const [dashboardData, learningData] = await Promise.all([
+        getDashboard(),
+        getLearningNotes(),
+      ]);
+      setDashboard(dashboardData);
+      setNotes(learningData);
     }
 
     loadData();
@@ -31,18 +25,17 @@ export default function App() {
 
   return (
     <main className="app-shell">
-      <header className="topbar">
-        <div>
-          <p className="label">Educational demo platform</p>
-          <h1>BioMed Control Center</h1>
-        </div>
-        <div className="safety-badge">Fake data only</div>
-      </header>
-
-      {error && <p className="error">{error}</p>}
+      <DeviceExplorer />
 
       {dashboard && (
-        <>
+        <section className="control-center" id="control-center">
+          <div className="section-title">
+            <div>
+              <p className="label">Supporting module</p>
+              <h2>Control Center Preview</h2>
+            </div>
+          </div>
+
           <section className="summary-grid">
             <SummaryCard
               label="Devices"
@@ -103,32 +96,10 @@ export default function App() {
                   ))}
                 </div>
               </section>
-
-              <section className="panel">
-                <div className="section-title">
-                  <div>
-                    <p className="label">Recent</p>
-                    <h2>Analysis history</h2>
-                  </div>
-                </div>
-                <div className="simple-list">
-                  {dashboard.recent_analyses.map((analysis) => (
-                    <article key={analysis.id}>
-                      <strong>{analysis.name}</strong>
-                      <span>{analysis.result}</span>
-                      <small>{analysis.heart_rate} bpm - {analysis.created_at}</small>
-                    </article>
-                  ))}
-                </div>
-              </section>
             </aside>
           </section>
-        </>
+        </section>
       )}
-
-      <Suspense fallback={<section className="wide-panel">Loading ECG lab...</section>}>
-        <EcgPanel />
-      </Suspense>
 
       <section className="learning-strip">
         {notes.map((note) => (
