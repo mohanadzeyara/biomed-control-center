@@ -52,7 +52,10 @@ echo - Git for Windows installed.
 echo - Portable GitHub CLI installed at C:\Users\ASUS\Documents\Codex\tools\bin\gh.exe
 echo - GitHub account logged in: mohanadzeyara
 echo - GitHub repo created and pushed: https://github.com/mohanadzeyara/biomed-control-center
-echo - Next deployment work after this summary: publish GitHub Pages frontend, then continue backend hosting if possible.
+echo - GitHub Pages frontend deployed: https://mohanadzeyara.github.io/biomed-control-center/
+echo - GitHub Pages status checked: live URL returned HTTP 200 OK.
+echo - Root render.yaml added so backend can be deployed on Render from the GitHub repo.
+echo - Backend hosting still needs Render account/browser authorization.
 echo.
 echo Computer changes made:
 echo - Git for Windows installed.
@@ -86,10 +89,10 @@ echo - RAM: Crucial CT16G4SFD824A 16GB DDR4-2400 260-pin SO-DIMM, but confirm ph
 echo - Adapter: UGREEN USB to SATA adapter for cloning the old HDD to the new SSD.
 echo.
 echo Deployment notes:
-echo - Frontend target: Vercel.
-echo - Backend target: Render.
-echo - GitHub repo target: biomed-control-center.
-echo - User may still need to log in to Vercel/Render if CLI/browser asks.
+echo - Frontend deployed on GitHub Pages.
+echo - Backend target: Render using render.yaml.
+echo - GitHub repo: https://github.com/mohanadzeyara/biomed-control-center
+echo - Render dashboard may ask the user to log in and connect GitHub.
 echo.
 echo End of summary.
 pause
