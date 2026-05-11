@@ -13,6 +13,79 @@ type Hotspot = {
   y: number;
 };
 
+type DevicePhoto = {
+  src: string;
+  fallback: string;
+  alt: string;
+  position?: string;
+};
+
+const fallbackPhoto =
+  'https://commons.wikimedia.org/wiki/Special:FilePath/Patient%20lying%20in%20hospital%20bed%20in%20intensive%20care%20unit%20in%20Germany%20in%202015.jpg';
+
+const devicePhotos: Record<LearningDevice['model'], DevicePhoto> = {
+  ecg: {
+    src: fallbackPhoto,
+    fallback: fallbackPhoto,
+    alt: 'Real intensive care monitor beside a hospital bed',
+    position: 'center',
+  },
+  ct: {
+    src: 'https://commons.wikimedia.org/wiki/Special:FilePath/Siemens%20Somatom%20CT%20scanner.jpg',
+    fallback: fallbackPhoto,
+    alt: 'Real CT scanner in a clinical room',
+    position: 'center',
+  },
+  ultrasound: {
+    src: 'https://commons.wikimedia.org/wiki/Special:FilePath/Sonoscape%20Ultrasound%20Machine.jpg',
+    fallback: fallbackPhoto,
+    alt: 'Real ultrasound machine with screen and probe',
+    position: 'center',
+  },
+  xray: {
+    src: 'https://commons.wikimedia.org/wiki/Special:FilePath/Portable%20x-ray%20machine%20in%20use%20at%20bedside%20(Reeve%20002312),%20National%20Museum%20of%20Health%20and%20Medicine%20(3298836186).jpg',
+    fallback: fallbackPhoto,
+    alt: 'Real portable X-ray machine beside a patient bed',
+    position: 'center',
+  },
+  mri: {
+    src: 'https://commons.wikimedia.org/wiki/Special:FilePath/Modern%203T%20MRI.JPG',
+    fallback: fallbackPhoto,
+    alt: 'Real modern MRI scanner',
+    position: 'center',
+  },
+  pump: {
+    src: 'https://commons.wikimedia.org/wiki/Special:FilePath/Infusion%20pump.JPG',
+    fallback: fallbackPhoto,
+    alt: 'Real infusion pump mounted in a clinical setting',
+    position: 'center',
+  },
+  ventilator: {
+    src: 'https://commons.wikimedia.org/wiki/Special:FilePath/Ventilator.jpg',
+    fallback: fallbackPhoto,
+    alt: 'Real mechanical ventilator system',
+    position: 'center',
+  },
+  defib: {
+    src: 'https://commons.wikimedia.org/wiki/Special:FilePath/Defibrillator%20at%20Bayford,%20Hertfordshire,%20England.jpg',
+    fallback: fallbackPhoto,
+    alt: 'Real automated external defibrillator cabinet',
+    position: 'center',
+  },
+  dialysis: {
+    src: 'https://commons.wikimedia.org/wiki/Special:FilePath/Patient%20lying%20in%20bed%20in%20intensive%20care%20unit%20of%20hospital%20with%20apparatuses%20and%20hemodialysis%20machine.jpg',
+    fallback: fallbackPhoto,
+    alt: 'Real hemodialysis machine near an intensive care bed',
+    position: 'center',
+  },
+  endoscope: {
+    src: 'https://commons.wikimedia.org/wiki/Special:FilePath/Endoscope.jpg',
+    fallback: fallbackPhoto,
+    alt: 'Real flexible medical endoscope',
+    position: 'center',
+  },
+};
+
 const hotspots: Record<LearningDevice['model'], Hotspot[]> = {
   ecg: [
     { partId: 'screen', x: 50, y: 26 },
@@ -93,15 +166,26 @@ const hotspots: Record<LearningDevice['model'], Hotspot[]> = {
 
 export default function DeviceModel({ device, selectedPartId, onSelectPart }: Props) {
   const deviceHotspots = hotspots[device.model].filter((spot) => device.parts.some((part) => part.id === spot.partId));
+  const photo = devicePhotos[device.model];
 
   return (
-    <div className={`device-picture ${device.model}`} aria-label={`${t(device.name, 'en')} descriptive machine picture`}>
+    <div className={`device-picture ${device.model}`} aria-label={`${t(device.name, 'en')} realistic machine photo`}>
       <div className="picture-title">
         <strong>{t(device.name, 'en')}</strong>
-        <span>labeled device picture</span>
+        <span>real machine photo with labels</span>
       </div>
-      <div className="machine-illustration">
-        <DevicePicture model={device.model} />
+      <div className="machine-photo-wrap">
+        <img
+          className="machine-photo"
+          src={photo.src}
+          alt={photo.alt}
+          style={{ objectPosition: photo.position || 'center' }}
+          onError={(event) => {
+            if (event.currentTarget.src !== photo.fallback) {
+              event.currentTarget.src = photo.fallback;
+            }
+          }}
+        />
       </div>
       <div className="picture-hotspots">
         {deviceHotspots.map((spot) => {
@@ -124,98 +208,5 @@ export default function DeviceModel({ device, selectedPartId, onSelectPart }: Pr
         })}
       </div>
     </div>
-  );
-}
-
-function DevicePicture({ model }: { model: LearningDevice['model'] }) {
-  if (model === 'ecg') {
-    return (
-      <>
-        <div className="pic-ecg-body">
-          <div className="pic-screen">
-            <span>HR 72</span>
-            <i />
-          </div>
-          <div className="pic-circuit-row">
-            <b />
-            <b />
-            <b />
-            <b />
-            <b />
-          </div>
-          <div className="pic-buttons">
-            <em />
-            <em />
-            <em />
-          </div>
-        </div>
-        <div className="pic-lead lead-one" />
-        <div className="pic-lead lead-two" />
-        <div className="pic-electrode electrode-one" />
-        <div className="pic-electrode electrode-two" />
-      </>
-    );
-  }
-
-  if (model === 'ct' || model === 'mri') {
-    return (
-      <>
-        <div className={`pic-ring ${model}`}>
-          <span />
-        </div>
-        <div className="pic-table" />
-        <div className="pic-patient" />
-        <div className="pic-console" />
-      </>
-    );
-  }
-
-  if (model === 'ultrasound') {
-    return (
-      <>
-        <div className="pic-cart">
-          <div className="pic-screen ultrasound-screen" />
-          <div className="pic-keyboard" />
-        </div>
-        <div className="pic-probe-cable" />
-        <div className="pic-probe" />
-        <div className="pic-beam" />
-      </>
-    );
-  }
-
-  if (model === 'xray') {
-    return (
-      <>
-        <div className="pic-xray-tube" />
-        <div className="pic-xray-beam" />
-        <div className="pic-xray-patient" />
-        <div className="pic-xray-detector" />
-      </>
-    );
-  }
-
-  if (model === 'endoscope') {
-    return (
-      <>
-        <div className="pic-endo-processor" />
-        <div className="pic-endo-handle" />
-        <div className="pic-endo-tube" />
-        <div className="pic-endo-tip" />
-        <div className="pic-endo-light" />
-      </>
-    );
-  }
-
-  return (
-    <>
-      <div className={`pic-therapy-body ${model}`}>
-        <div className="pic-screen small" />
-        <div className="pic-module left" />
-        <div className="pic-module right" />
-      </div>
-      <div className="pic-fluid-line" />
-      <div className="pic-sensor-dot" />
-    </>
   );
 }

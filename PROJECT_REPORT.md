@@ -113,3 +113,22 @@ For this upgrade pass, system `npm` and `git` were not available on PATH. I down
 - Unit tests and API tests
 - Optional free public GLB workflow using Blender-created models or openly licensed models with attribution
 - Course-aligned content import from your PDFs for Grundlagen der Elektrotechnik, Anatomie, Medizintechnik 1, and Medizintechnik 2
+
+## 2026-05-11 Real Photo and Samsung-Style Pass
+
+The newest update responds to the feedback that the previous visual system still looked too animated and did not yet feel like a Samsung-style product page. I checked Samsung's Galaxy Z Fold7 product page as a design reference: it uses large real product imagery, feature highlights, close-up visual sections, comparison/story sections, and a sticky section rhythm. The MedTech page now moves in that direction while staying educational.
+
+Changes added in this pass:
+
+- Reduced the main page side margins from a narrow centered layout to a wider 1500px content shell.
+- Replaced the CSS-drawn device pictures with realistic machine photos from free/public web sources, with fallback images if a source fails.
+- Kept clickable labels on top of the real photos so each device still works as an engineering part explorer.
+- Replaced the ECG flagship hero's drawn monitor with a real intensive-care monitor photo.
+- Kept ECG's four study categories visible: machine photo + parts, how it works, before/after results, and GET 1/2.
+- Moved the ECG analysis lab into its own ECG-only section so it is no longer visually mixed into the shared device tabs.
+- Updated README text so it no longer promises 3D models where the project now intentionally uses clearer realistic machine photos.
+- Added this report note and a `CHAT_SUMMARY.cmd` helper so the local update history is preserved instead of overwritten.
+
+Design direction after this pass:
+
+The ECG monitor is still the flagship page. It should feel like a product/story page first, then a study lab second: real hero image, highlights, signal chain, close-up engineering explanations, mini report, dedicated ECG lab, and finally the normal reusable device categories.

@@ -80,13 +80,13 @@ export default function DeviceExplorer({ lang }: Props) {
             <h1>MedTech Device Explorer</h1>
             <p>
               {lang === 'en'
-                ? 'Choose a medical device and learn it as an engineering system: 3D parts, electrotechnics, signal processing, image processing, safety, and operation.'
-                : 'Waehle ein medizinisches Geraet und lerne es als technisches System: 3D-Bauteile, Elektrotechnik, Signalverarbeitung, Bildverarbeitung, Sicherheit und Bedienung.'}
+                ? 'Choose a medical device and learn it as an engineering system: real machine photos, labeled parts, electrotechnics, signal processing, image processing, safety, and operation.'
+                : 'Waehle ein medizinisches Geraet und lerne es als technisches System: echte Geraetefotos, beschriftete Teile, Elektrotechnik, Signalverarbeitung, Bildverarbeitung, Sicherheit und Bedienung.'}
             </p>
           </div>
           <div className="hero-stats">
             <span><Box size={18} /> {learningDevices.length} {lang === 'en' ? 'devices' : 'Geraete'}</span>
-            <span><Rotate3D size={18} /> {lang === 'en' ? 'clickable 3D parts' : 'anklickbare 3D-Teile'}</span>
+            <span><Image size={18} /> {lang === 'en' ? 'real photo labels' : 'echte Fotolabels'}</span>
             <span><Zap size={18} /> {lang === 'en' ? 'engineering-first explanations' : 'Erklaerungen mit Elektrotechnik'}</span>
           </div>
         </section>
@@ -97,8 +97,8 @@ export default function DeviceExplorer({ lang }: Props) {
             <h2>{lang === 'en' ? 'How to use the platform' : 'So benutzt man die Plattform'}</h2>
             <p>
               {lang === 'en'
-                ? 'Pick a device card, open its device profile, inspect the model, follow the short process clip, compare simulated before/after data, and connect the device to GET 1/2 electrotechnics.'
-                : 'Waehle eine Geraetekarte, oeffne das Geraeteprofil, pruefe das Modell, folge dem kurzen Prozessclip, vergleiche simulierte Vorher/Nachher-Daten und verbinde das Geraet mit GET 1/2 Elektrotechnik.'}
+                ? 'Pick a device card, open its device profile, inspect the real machine photo, follow the short process clip, compare simulated before/after data, and connect the device to GET 1/2 electrotechnics.'
+                : 'Waehle eine Geraetekarte, oeffne das Geraeteprofil, pruefe das echte Geraetefoto, folge dem kurzen Prozessclip, vergleiche simulierte Vorher/Nachher-Daten und verbinde das Geraet mit GET 1/2 Elektrotechnik.'}
             </p>
           </div>
           <div className="video-storyboard" aria-label={lang === 'en' ? 'Animated project explainer' : 'Animierte Projekt-Erklaerung'}>
@@ -185,6 +185,23 @@ export default function DeviceExplorer({ lang }: Props) {
 
       {device.id === 'ecg' && <EcgFlagshipProfile lang={lang} />}
       {device.id === 'ecg' && <EcgStorySections lang={lang} />}
+      {device.id === 'ecg' && (
+        <section className="ecg-lab-section">
+          <div className="section-title">
+            <div>
+              <p className="label">{lang === 'en' ? 'ECG-only lab section' : 'Nur-EKG-Laborbereich'}</p>
+              <h2>{lang === 'en' ? 'Analyze the ECG signal here' : 'EKG-Signal hier analysieren'}</h2>
+            </div>
+            <Activity size={24} />
+          </div>
+          <p>
+            {lang === 'en'
+              ? 'This lab belongs only to the ECG monitor page. The other devices keep their own device profile, process, results, and GET categories without inheriting the ECG analysis controls.'
+              : 'Dieses Labor gehoert nur zur EKG-Monitor-Seite. Die anderen Geraete behalten ihre eigenen Bereiche fuer Geraeteprofil, Prozess, Ergebnisse und GET-Bezug, ohne die EKG-Analyse-Steuerung zu uebernehmen.'}
+          </p>
+          <EcgPanel />
+        </section>
+      )}
 
       <section className="study-shell">
         <div className="study-tabs" role="tablist" aria-label={lang === 'en' ? 'Device study sections' : 'Geraete-Lernbereiche'}>
@@ -211,7 +228,7 @@ export default function DeviceExplorer({ lang }: Props) {
               <div className="model-panel pro-model-panel">
                 <div className="section-title">
                   <div>
-                    <p className="label">{lang === 'en' ? 'Clear labeled machine picture' : 'Klares beschriftetes Geraetebild'}</p>
+                    <p className="label">{lang === 'en' ? 'Real labeled machine photo' : 'Echtes beschriftetes Geraetefoto'}</p>
                     <h2>{t(device.name, lang)}</h2>
                   </div>
                   <Rotate3D size={24} />
@@ -409,7 +426,6 @@ export default function DeviceExplorer({ lang }: Props) {
         )}
       </section>
 
-      {device.id === 'ecg' && <EcgPanel />}
     </>
   );
 }
@@ -447,22 +463,11 @@ function EcgFlagshipProfile({ lang }: { lang: Lang }) {
   return (
     <section className="flagship-profile">
       <div className="flagship-visual">
-        <div className="ecg-product">
-          <div className="ecg-screen">
-            <span>HR 72</span>
-            <div className="ecg-wave" />
-          </div>
-          <div className="ecg-controls-visual">
-            <i />
-            <i />
-            <i />
-          </div>
-          <div className="ecg-leads-visual">
-            <b />
-            <b />
-            <b />
-          </div>
-        </div>
+        <img
+          className="flagship-photo"
+          src="https://commons.wikimedia.org/wiki/Special:FilePath/Patient%20lying%20in%20hospital%20bed%20in%20intensive%20care%20unit%20in%20Germany%20in%202015.jpg"
+          alt="Real intensive care ECG monitor and patient monitoring equipment"
+        />
         <div className="device-status-overlay">
           <strong>{lang === 'en' ? 'Device status' : 'Geraetestatus'}</strong>
           <span><ShieldCheck size={16} /> {lang === 'en' ? 'Active simulation' : 'Aktive Simulation'}</span>

@@ -305,15 +305,12 @@ body {
 .device-picture {
   position: relative;
   width: 100%;
-  min-height: 460px;
+  min-height: 540px;
   overflow: hidden;
   margin: 16px 0 8px;
   border-radius: 8px;
   border: 1px solid var(--border);
-  background:
-    radial-gradient(circle at 72% 22%, rgba(20, 184, 166, 0.18), transparent 28%),
-    linear-gradient(135deg, rgba(15, 118, 110, 0.08), rgba(56, 189, 248, 0.1)),
-    var(--canvas-bg);
+  background: var(--canvas-bg);
 }
 
 .picture-title {
@@ -323,18 +320,45 @@ body {
   z-index: 2;
   display: grid;
   gap: 3px;
+  max-width: min(420px, calc(100% - 36px));
+  padding: 12px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.46);
+  border-radius: 8px;
+  background: rgba(15, 23, 42, 0.72);
+  color: #f8fafc;
+  backdrop-filter: blur(12px);
 }
 
 .picture-title span {
-  color: var(--muted);
+  color: #cbd5e1;
   font-size: 0.78rem;
   font-weight: 800;
   text-transform: uppercase;
 }
 
-.machine-illustration {
+.machine-illustration,
+.machine-photo-wrap {
   position: absolute;
   inset: 0;
+}
+
+.machine-photo {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  filter: contrast(1.03) saturate(1.02);
+}
+
+.machine-photo-wrap::after,
+.flagship-visual::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(15, 23, 42, 0.22), transparent 34%),
+    linear-gradient(0deg, rgba(15, 23, 42, 0.28), transparent 42%);
 }
 
 .picture-hotspots button {
@@ -348,7 +372,7 @@ body {
   border: 1px solid rgba(15, 118, 110, 0.42);
   border-radius: 999px;
   padding: 0 9px 0 6px;
-  background: color-mix(in srgb, var(--panel-solid) 92%, transparent);
+  background: rgba(255, 255, 255, 0.92);
   color: var(--text);
   font-size: 0.72rem;
   font-weight: 900;
@@ -941,9 +965,9 @@ input {
 }
 
 .app-shell {
-  width: min(1240px, calc(100% - 32px));
+  width: min(1500px, calc(100% - 16px));
   margin: 0 auto;
-  padding: 32px 0 48px;
+  padding: 24px 0 48px;
 }
 
 .topbar {
@@ -1317,7 +1341,7 @@ h3 {
 
 @media (max-width: 620px) {
   .app-shell {
-    width: min(100% - 20px, 1240px);
+    width: min(100% - 10px, 1500px);
     padding-top: 20px;
   }
 
@@ -1501,9 +1525,17 @@ h3 {
   display: grid;
   place-items: center;
   overflow: hidden;
-  background:
-    radial-gradient(circle at 72% 22%, rgba(20, 184, 166, 0.22), transparent 30%),
-    linear-gradient(135deg, rgba(15, 23, 42, 0.08), rgba(255, 255, 255, 0.1));
+  background: #0f172a;
+}
+
+.flagship-photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  filter: contrast(1.06) saturate(1.02);
 }
 
 .ecg-product {
@@ -1571,6 +1603,7 @@ h3 {
   position: absolute;
   right: 18px;
   bottom: 18px;
+  z-index: 2;
   display: grid;
   gap: 8px;
   width: min(260px, calc(100% - 36px));
@@ -1844,10 +1877,47 @@ h3 {
   height: 118px;
   border-radius: 8px;
   border: 1px solid var(--border);
-  background:
-    radial-gradient(circle at 32% 44%, rgba(20, 184, 166, 0.65), transparent 18%),
-    linear-gradient(135deg, rgba(15, 118, 110, 0.16), rgba(56, 189, 248, 0.14)),
-    var(--soft);
+  background-color: var(--soft);
+  background-size: cover;
+  background-position: center;
+}
+
+.closeup-grid article:nth-child(1) .closeup-visual {
+  background-image: url("https://commons.wikimedia.org/wiki/Special:FilePath/ECG%20electrodes.jpg");
+}
+
+.closeup-grid article:nth-child(2) .closeup-visual {
+  background-image: url("https://commons.wikimedia.org/wiki/Special:FilePath/Electrocardiography%20circuit.jpg");
+}
+
+.closeup-grid article:nth-child(3) .closeup-visual {
+  background-image: url("https://commons.wikimedia.org/wiki/Special:FilePath/Analog%20filter%20circuit.jpg");
+}
+
+.closeup-grid article:nth-child(4) .closeup-visual {
+  background-image: url("https://commons.wikimedia.org/wiki/Special:FilePath/Patient%20monitor.jpg");
+}
+
+.ecg-lab-section {
+  display: grid;
+  gap: 14px;
+  margin-bottom: 18px;
+  padding: 22px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--panel-bg);
+  box-shadow: 0 18px 50px rgba(15, 23, 42, 0.07);
+}
+
+.ecg-lab-section > p {
+  max-width: 980px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.ecg-lab-section .wide-panel {
+  margin-bottom: 0;
+  box-shadow: none;
 }
 
 .mini-report {

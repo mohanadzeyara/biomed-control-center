@@ -1,6 +1,6 @@
 # MedTech Device Explorer
 
-MedTech Device Explorer is an educational biomedical engineering website for learning how medical devices work. It uses clickable 3D teaching models, device-part explanations, signal and image processing demos, and fake/demo data only.
+MedTech Device Explorer is an educational biomedical engineering website for learning how medical devices work. It uses realistic labeled machine photos, device-part explanations, signal and image processing demos, and fake/demo data only.
 
 Live demo: https://mohanadzeyara.github.io/biomed-control-center/
 
@@ -21,7 +21,7 @@ Main learning sections:
 
 Each device section includes:
 
-- A movable 3D model
+- A realistic labeled machine photo
 - Clickable parts with functions and engineering details
 - Electrotechnics links for sensors, amplifiers, ADCs, motors, filters, and power electronics
 - Separate device pages using browser routes such as `#/device/ecg`
@@ -32,6 +32,14 @@ Each device section includes:
 - Workflow explanation from acquisition to display
 - Engineering Deep Dive cards covering sensors, analog front ends, high-voltage electronics, magnetic fields, RF coils, gradients, reconstruction, control loops, and filtering
 - Educational safety wording, with no diagnosis claims
+
+Latest design pass:
+
+- Reduced the wide side margins so the page uses more of the screen.
+- Replaced the drawn/animated device visuals with realistic machine photos and clickable labels.
+- Kept the ECG page categories: machine photo + parts, how it works, before/after results, and GET 1/2.
+- Moved the ECG analysis lab into a dedicated ECG-only section so it does not feel mixed into every device.
+- Pushed the ECG page closer to a Samsung-style product story with a real visual hero, highlights, close-up sections, signal chain, mini report, and then the normal study tabs.
 
 Phase 1 includes:
 
