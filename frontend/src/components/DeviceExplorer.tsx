@@ -184,6 +184,7 @@ export default function DeviceExplorer({ lang }: Props) {
       </section>
 
       {device.id === 'ecg' && <EcgFlagshipProfile lang={lang} />}
+      {device.id === 'ecg' && <EcgStorySections lang={lang} />}
 
       <section className="study-shell">
         <div className="study-tabs" role="tablist" aria-label={lang === 'en' ? 'Device study sections' : 'Geraete-Lernbereiche'}>
@@ -494,6 +495,168 @@ function EcgFlagshipProfile({ lang }: { lang: Lang }) {
           ))}
         </div>
       </div>
+    </section>
+  );
+}
+
+function EcgStorySections({ lang }: { lang: Lang }) {
+  const highlights =
+    lang === 'en'
+      ? [
+          ['Millivolt signal detection', 'Reads tiny skin potentials without loading the source.'],
+          ['High input impedance', 'Protects weak electrode signals from measurement error.'],
+          ['Differential amplification', 'Boosts ECG voltage while rejecting shared interference.'],
+          ['50 Hz noise reduction', 'Targets mains pickup without destroying useful ECG shape.'],
+          ['R-peak detection', 'Turns the waveform into heart-rate and rhythm information.'],
+          ['Patient isolation', 'Keeps leakage current and fault paths under control.'],
+        ]
+      : [
+          ['Millivolt-Signalerkennung', 'Liest winzige Hautpotentiale, ohne die Quelle stark zu belasten.'],
+          ['Hohe Eingangsimpedanz', 'Schuetzt schwache Elektrodensignale vor Messfehlern.'],
+          ['Differenzverstaerkung', 'Hebt EKG-Spannung an und unterdrueckt gemeinsame Stoerung.'],
+          ['50-Hz-Stoerreduktion', 'Zielt auf Netzeinkopplung, ohne die EKG-Form zu zerstoeren.'],
+          ['R-Zacken-Erkennung', 'Macht aus der Kurve Herzfrequenz- und Rhythmusinformation.'],
+          ['Patientenisolation', 'Kontrolliert Ableitstrom und Fehlerpfade.'],
+        ];
+  const closeups =
+    lang === 'en'
+      ? [
+          {
+            title: 'Electrode close-up',
+            kicker: 'Skin interface',
+            body: 'The electrode is not just a wire. It is a noisy electrochemical interface with impedance, capacitance, offset voltage, and motion sensitivity. This is why skin preparation and contact quality matter before any digital filter can help.',
+          },
+          {
+            title: 'Amplifier close-up',
+            kicker: 'Analog front end',
+            body: 'The instrumentation amplifier must amplify the small differential ECG while rejecting common-mode mains voltage. In practice, electrode imbalance and cable capacitance reduce ideal CMRR, so layout and protection matter.',
+          },
+          {
+            title: 'Filter close-up',
+            kicker: 'Frequency response',
+            body: 'High-pass, low-pass, and notch filters remove drift, muscle noise, and 50 Hz pickup. The tradeoff is phase shift and possible waveform distortion if cutoff frequencies are chosen badly.',
+          },
+          {
+            title: 'Display close-up',
+            kicker: 'Clinical output',
+            body: 'The display is a processed interpretation surface: waveform, detected R peaks, heart-rate estimate, signal quality, and alarms. It must not hide uncertainty from bad contact or noise.',
+          },
+        ]
+      : [
+          {
+            title: 'Elektroden-Close-up',
+            kicker: 'Haut-Grenzflaeche',
+            body: 'Die Elektrode ist nicht nur ein Draht. Sie ist eine rauschende elektrochemische Grenzflaeche mit Impedanz, Kapazitaet, Offsetspannung und Bewegungsempfindlichkeit. Deshalb zaehlen Hautvorbereitung und Kontaktqualitaet vor jedem Digitalfilter.',
+          },
+          {
+            title: 'Verstaerker-Close-up',
+            kicker: 'Analoge Eingangsstufe',
+            body: 'Der Instrumentenverstaerker muss das kleine differentielle EKG verstaerken und Gleichtakt-Netzspannung unterdruecken. In der Praxis reduzieren Elektrodenunsymmetrie und Kabelkapazitaet den idealen CMRR, deshalb zaehlen Layout und Schutzschaltung.',
+          },
+          {
+            title: 'Filter-Close-up',
+            kicker: 'Frequenzgang',
+            body: 'Hochpass, Tiefpass und Kerbfilter entfernen Drift, Muskelrauschen und 50-Hz-Einkopplung. Der Kompromiss ist Phasenverschiebung und moegliche Kurvenverzerrung bei schlecht gewaehltne Grenzfrequenzen.',
+          },
+          {
+            title: 'Anzeige-Close-up',
+            kicker: 'Klinische Ausgabe',
+            body: 'Die Anzeige ist eine verarbeitete Interpretationsflaeche: Kurve, erkannte R-Zacken, Herzfrequenz, Signalqualitaet und Alarme. Sie darf Unsicherheit durch schlechten Kontakt oder Rauschen nicht verstecken.',
+          },
+        ];
+
+  return (
+    <section className="ecg-story">
+      <div className="story-nav">
+        {(lang === 'en' ? ['Overview', 'Signal chain', 'Close-ups', 'Mini report'] : ['Ueberblick', 'Signalkette', 'Close-ups', 'Mini-Bericht']).map((item) => (
+          <span key={item}>{item}</span>
+        ))}
+      </div>
+
+      <section className="story-band dark-band">
+        <div>
+          <p className="label">{lang === 'en' ? 'Samsung-style device story' : 'Samsung-artige Geraete-Story'}</p>
+          <h2>{lang === 'en' ? 'From skin potentials to heartbeat insight' : 'Vom Hautpotential zur Herzschlag-Information'}</h2>
+          <p>
+            {lang === 'en'
+              ? 'The ECG monitor is shown as a complete biomedical engineering chain: biological source, sensor interface, analog electronics, filtering, sampling, software interpretation, alarms, and safety.'
+              : 'Der EKG-Monitor wird als komplette Medizintechnik-Kette gezeigt: biologische Quelle, Sensorgrenze, Analogelektronik, Filterung, Abtastung, Softwareinterpretation, Alarme und Sicherheit.'}
+          </p>
+        </div>
+        <div className="signal-ribbon">
+          <span>mV</span>
+          <i />
+          <span>ADC</span>
+          <i />
+          <span>72 bpm</span>
+        </div>
+      </section>
+
+      <div className="highlight-grid">
+        {highlights.map(([title, body]) => (
+          <article key={title}>
+            <strong>{title}</strong>
+            <p>{body}</p>
+          </article>
+        ))}
+      </div>
+
+      <section className="chain-section">
+        <div>
+          <p className="label">{lang === 'en' ? 'Signal chain' : 'Signalkette'}</p>
+          <h2>{lang === 'en' ? 'Electrode to display' : 'Elektrode bis Anzeige'}</h2>
+        </div>
+        <div className="chain-rail">
+          {(lang === 'en'
+            ? ['Heart field', 'Electrode', 'Protection', 'Amplifier', 'Filters', 'ADC', 'Display']
+            : ['Herzfeld', 'Elektrode', 'Schutz', 'Verstaerker', 'Filter', 'ADC', 'Anzeige']
+          ).map((step, index) => (
+            <div key={step}>
+              <span>{index + 1}</span>
+              <strong>{step}</strong>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <div className="closeup-grid">
+        {closeups.map((item) => (
+          <article key={item.title}>
+            <div className="closeup-visual" />
+            <p className="label">{item.kicker}</p>
+            <h3>{item.title}</h3>
+            <p>{item.body}</p>
+          </article>
+        ))}
+      </div>
+
+      <section className="mini-report">
+        <div>
+          <p className="label">{lang === 'en' ? 'Mini report' : 'Mini-Bericht'}</p>
+          <h2>{lang === 'en' ? 'What the demo analysis would report' : 'Was die Demo-Analyse melden wuerde'}</h2>
+        </div>
+        <div className="report-metrics">
+          {(lang === 'en'
+            ? [
+                ['Heart rate', '72 bpm'],
+                ['Detected R peaks', '12 / window'],
+                ['Signal quality', 'Stable after filtering'],
+                ['Processing used', 'Baseline + notch + bandpass'],
+              ]
+            : [
+                ['Herzfrequenz', '72 bpm'],
+                ['Erkannte R-Zacken', '12 / Fenster'],
+                ['Signalqualitaet', 'Stabil nach Filterung'],
+                ['Verarbeitung', 'Basislinie + Kerbe + Bandpass'],
+              ]
+          ).map(([label, value]) => (
+            <article key={label}>
+              <span>{label}</span>
+              <strong>{value}</strong>
+            </article>
+          ))}
+        </div>
+      </section>
     </section>
   );
 }
