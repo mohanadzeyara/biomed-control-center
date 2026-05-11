@@ -1883,19 +1883,19 @@ h3 {
 }
 
 .closeup-grid article:nth-child(1) .closeup-visual {
-  background-image: url("https://commons.wikimedia.org/wiki/Special:FilePath/ECG%20electrodes.jpg");
+  background-image: url("https://commons.wikimedia.org/wiki/Special:FilePath/Electrode-skintact.jpg");
 }
 
 .closeup-grid article:nth-child(2) .closeup-visual {
-  background-image: url("https://commons.wikimedia.org/wiki/Special:FilePath/Electrocardiography%20circuit.jpg");
+  background-image: url("https://commons.wikimedia.org/wiki/Special:FilePath/BTL-Kabel%20s%20elektrodami.jpg");
 }
 
 .closeup-grid article:nth-child(3) .closeup-visual {
-  background-image: url("https://commons.wikimedia.org/wiki/Special:FilePath/Analog%20filter%20circuit.jpg");
+  background-image: url("https://commons.wikimedia.org/wiki/Special:FilePath/ECG%20Mortara.jpg");
 }
 
 .closeup-grid article:nth-child(4) .closeup-visual {
-  background-image: url("https://commons.wikimedia.org/wiki/Special:FilePath/Patient%20monitor.jpg");
+  background-image: url("https://commons.wikimedia.org/wiki/Special:FilePath/Schiller%20EKG%20Ger%C3%A4t%20AT102%20(13050).jpg");
 }
 
 .ecg-lab-section {
