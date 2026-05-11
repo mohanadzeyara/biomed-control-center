@@ -21,21 +21,36 @@ export default function DeviceModel({ device, selectedPartId, onSelectPart }: Pr
     const activeCanvas = canvas;
 
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(getComputedStyle(document.documentElement).getPropertyValue('--canvas-bg').trim() || '#f8fafc');
+    const canvasColor = getComputedStyle(document.documentElement).getPropertyValue('--canvas-bg').trim() || '#f8fafc';
+    scene.background = new THREE.Color(canvasColor);
+    scene.fog = new THREE.Fog(new THREE.Color(canvasColor), 9, 16);
 
     const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 100);
-    camera.position.set(5.1, 3.8, 7.4);
+    camera.position.set(5.4, 3.9, 7.2);
 
     const renderer = new THREE.WebGLRenderer({ canvas: activeCanvas, antialias: true });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.08;
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
     const group = new THREE.Group();
     scene.add(group);
 
-    scene.add(new THREE.HemisphereLight(0xffffff, 0x64748b, 2.2));
+    scene.add(new THREE.HemisphereLight(0xffffff, 0x64748b, 2.4));
     const key = new THREE.DirectionalLight(0xffffff, 2.8);
     key.position.set(5, 6, 4);
+    key.castShadow = true;
+    key.shadow.mapSize.set(1024, 1024);
     scene.add(key);
+    const rim = new THREE.DirectionalLight(0x99f6e4, 1.2);
+    rim.position.set(-4, 3, -5);
+    scene.add(rim);
+    const fill = new THREE.PointLight(0x38bdf8, 0.9, 12);
+    fill.position.set(0, 2.8, 3.5);
+    scene.add(fill);
 
     const parts = buildModel(device, group);
     const raycaster = new THREE.Raycaster();
@@ -187,6 +202,13 @@ function tube(id: string, color: number, points: Array<[number, number, number]>
 }
 
 function add(group: THREE.Group, parts: PartMesh[], mesh: PartMesh) {
+  mesh.castShadow = true;
+  mesh.receiveShadow = true;
+  const edges = new THREE.LineSegments(
+    new THREE.EdgesGeometry(mesh.geometry, 28),
+    new THREE.LineBasicMaterial({ color: 0x0f172a, transparent: true, opacity: 0.18 }),
+  );
+  mesh.add(edges);
   parts.push(mesh);
   group.add(mesh);
 }
@@ -275,7 +297,17 @@ function buildModel(device: LearningDevice, group: THREE.Group) {
     add(group, parts, box('screen', 0xe2e8f0, [0, 0, 0], [2, 2.45, 0.75], 0.92));
   }
 
+  const floor = new THREE.Mesh(
+    new THREE.CircleGeometry(3.05, 96),
+    mat(0xe2e8f0, { roughness: 0.76, opacity: 0.72 }),
+  );
+  floor.position.set(0, -2.02, 0);
+  floor.rotation.x = -Math.PI / 2;
+  floor.receiveShadow = true;
+  group.add(floor);
+
   const base = box('__base', 0xcbd5e1, [0, -1.95, 0], [4.8, 0.08, 2.4]);
+  base.receiveShadow = true;
   base.userData.partId = undefined;
   group.add(base);
   return parts;
