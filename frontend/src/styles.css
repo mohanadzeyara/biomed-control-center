@@ -302,6 +302,10 @@ body {
   padding: 18px;
 }
 
+.model-stage {
+  position: relative;
+}
+
 .device-canvas {
   width: 100%;
   height: 460px;
@@ -311,6 +315,39 @@ body {
   border: 1px solid #e2e8f0;
   background: #f8fafc;
   touch-action: none;
+}
+
+.model-loading {
+  position: absolute;
+  inset: 16px 0 8px;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  background: linear-gradient(90deg, rgba(15, 118, 110, 0.08), rgba(56, 189, 248, 0.08)), var(--canvas-bg);
+  color: var(--muted);
+  font-weight: 900;
+}
+
+.model-tools {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 18px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  pointer-events: none;
+}
+
+.model-tools span {
+  padding: 6px 8px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--panel-solid) 88%, transparent);
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 900;
 }
 
 .lesson-panel {
@@ -1372,7 +1409,7 @@ h3 {
 .clip-strip {
   position: relative;
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(138px, 1fr));
   gap: 10px;
   overflow: hidden;
   padding: 14px;
@@ -1391,6 +1428,13 @@ h3 {
   border-radius: 8px;
   background: var(--panel-bg);
   border: 1px solid var(--border);
+  transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+}
+
+.clip-step.active {
+  border-color: #0f766e;
+  box-shadow: 0 12px 28px rgba(15, 118, 110, 0.2);
+  transform: translateY(-2px);
 }
 
 .clip-step span {
@@ -1406,23 +1450,78 @@ h3 {
 
 .moving-pulse {
   position: absolute;
-  left: 20px;
+  left: 8%;
   bottom: 10px;
   width: 18px;
   height: 18px;
   border-radius: 999px;
   background: #e11d48;
   box-shadow: 0 0 20px rgba(225, 29, 72, 0.65);
-  animation: movePulse 4.8s linear infinite;
+  transition: left 420ms ease;
 }
 
-@keyframes movePulse {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(min(980px, calc(100vw - 90px)));
-  }
+.process-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.process-controls button {
+  min-height: 36px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0 10px;
+  background: var(--panel-solid);
+  color: var(--text);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.process-progress {
+  height: 8px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--soft);
+  border: 1px solid var(--border);
+}
+
+.process-progress span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #0f766e, #38bdf8);
+  transition: width 420ms ease;
+}
+
+.processing-explanation {
+  display: grid;
+  grid-template-columns: 0.9fr 1.25fr 1fr;
+  gap: 12px;
+}
+
+.processing-explanation article {
+  display: grid;
+  gap: 8px;
+  align-content: start;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--soft);
+}
+
+.processing-explanation p,
+.processing-explanation li {
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+.processing-explanation ol {
+  margin: 0;
+  padding-left: 20px;
 }
 
 @media (max-width: 920px) {
@@ -1433,7 +1532,8 @@ h3 {
 
   .study-tabs,
   .usage-grid,
-  .electro-concept-grid {
+  .electro-concept-grid,
+  .processing-explanation {
     grid-template-columns: 1fr;
   }
 

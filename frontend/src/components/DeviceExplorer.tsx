@@ -12,7 +12,9 @@ import {
   Image,
   Layers,
   MonitorDot,
+  Pause,
   Play,
+  RotateCcw,
   Rotate3D,
   ShieldCheck,
   Stethoscope,
@@ -35,6 +37,8 @@ export default function DeviceExplorer({ lang }: Props) {
   const device = useMemo(() => learningDevices.find((item) => item.id === deviceId), [deviceId]);
   const [selectedPartId, setSelectedPartId] = useState('');
   const [activeTab, setActiveTab] = useState<StudyTab>('model');
+  const [processStep, setProcessStep] = useState(0);
+  const [processPlaying, setProcessPlaying] = useState(true);
   const selectedPart = device?.parts.find((part) => part.id === selectedPartId) || device?.parts[0];
 
   useEffect(() => {
@@ -53,7 +57,19 @@ export default function DeviceExplorer({ lang }: Props) {
 
   useEffect(() => {
     setActiveTab('model');
+    setProcessStep(0);
+    setProcessPlaying(true);
   }, [device?.id]);
+
+  useEffect(() => {
+    if (!device || activeTab !== 'use' || !processPlaying) {
+      return;
+    }
+    const timer = window.setInterval(() => {
+      setProcessStep((step) => (step + 1) % device.demo.clipSteps.length);
+    }, 1800);
+    return () => window.clearInterval(timer);
+  }, [activeTab, device, processPlaying]);
 
   if (!device) {
     return (
@@ -133,8 +149,8 @@ export default function DeviceExplorer({ lang }: Props) {
     {
       id: 'use',
       icon: <Film size={18} />,
-      label: lang === 'en' ? 'Short use video' : 'Kurzes Bedienvideo',
-      short: lang === 'en' ? 'use' : 'Bedienung',
+      label: lang === 'en' ? 'How it works' : 'Wie es funktioniert',
+      short: lang === 'en' ? 'process' : 'Ablauf',
     },
     {
       id: 'results',
@@ -150,6 +166,7 @@ export default function DeviceExplorer({ lang }: Props) {
     },
   ];
   const electroConcepts = getElectroConcepts(device.model, lang);
+  const processing = getProcessingExplanation(device.model, lang);
 
   return (
     <>
@@ -270,19 +287,31 @@ export default function DeviceExplorer({ lang }: Props) {
           <section className="study-panel">
             <div className="section-title">
               <div>
-                <p className="label">{lang === 'en' ? 'Short use video' : 'Kurzes Bedienvideo'}</p>
+                <p className="label">{lang === 'en' ? 'Animated process walkthrough' : 'Animierter Prozessablauf'}</p>
                 <h2>{t(device.demo.title, lang)}</h2>
               </div>
-              <Film size={24} />
+              <div className="process-controls">
+                <button type="button" onClick={() => setProcessPlaying(!processPlaying)}>
+                  {processPlaying ? <Pause size={16} /> : <Play size={16} />}
+                  {processPlaying ? (lang === 'en' ? 'Pause' : 'Pause') : (lang === 'en' ? 'Play' : 'Start')}
+                </button>
+                <button type="button" onClick={() => setProcessStep(0)}>
+                  <RotateCcw size={16} />
+                  {lang === 'en' ? 'Restart' : 'Neu starten'}
+                </button>
+              </div>
             </div>
             <div className={`clip-strip ${device.model}`}>
               {device.demo.clipSteps.map((step, index) => (
-                <div className="clip-step" key={t(step, 'en')}>
+                <div className={`clip-step ${index === processStep ? 'active' : ''}`} key={t(step, 'en')}>
                   <span>{index + 1}</span>
                   <strong>{t(step, lang)}</strong>
                 </div>
               ))}
-              <div className="moving-pulse" />
+              <div className="moving-pulse" style={{ left: `${8 + processStep * (84 / Math.max(device.demo.clipSteps.length - 1, 1))}%` }} />
+            </div>
+            <div className="process-progress">
+              <span style={{ width: `${((processStep + 1) / device.demo.clipSteps.length) * 100}%` }} />
             </div>
             <div className="usage-grid">
               {device.workflow.map((step, index) => (
@@ -315,6 +344,24 @@ export default function DeviceExplorer({ lang }: Props) {
               </div>
             </div>
             <p className="result-explanation">{t(device.demo.explanation, lang)}</p>
+            <div className="processing-explanation">
+              <article>
+                <h3>{lang === 'en' ? 'Problem' : 'Problem'}</h3>
+                <p>{processing.problem}</p>
+              </article>
+              <article>
+                <h3>{lang === 'en' ? 'Processing steps' : 'Verarbeitungsschritte'}</h3>
+                <ol>
+                  {processing.steps.map((step) => (
+                    <li key={step}>{step}</li>
+                  ))}
+                </ol>
+              </article>
+              <article>
+                <h3>{lang === 'en' ? 'Result and tradeoff' : 'Ergebnis und Kompromiss'}</h3>
+                <p>{processing.tradeoff}</p>
+              </article>
+            </div>
             <div className="filter-row">
               {device.demo.filters.map((filter) => (
                 <span key={t(filter, 'en')}>{t(filter, lang)}</span>
@@ -466,6 +513,82 @@ function getCardPreview(model: string, lang: Lang) {
   };
 
   return previews[model] || { icon: Box, value: 'GET', label: lang === 'en' ? 'study link' : 'Studienbezug' };
+}
+
+function getProcessingExplanation(model: string, lang: Lang) {
+  const ecg =
+    lang === 'en'
+      ? {
+          problem: 'The raw ECG contains baseline drift from movement and breathing, high-frequency muscle noise, and 50 Hz mains interference. If these artifacts stay in the signal, R-peak detection and heart-rate estimation become unreliable.',
+          steps: [
+            'Baseline correction removes slow movement of the whole waveform.',
+            'Bandpass filtering keeps the ECG band while reducing very slow drift and high-frequency noise.',
+            'A 50 Hz notch filter reduces power-line interference from the electrical environment.',
+            'R-peak detection identifies the dominant heartbeat peaks and estimates heart rate.',
+          ],
+          tradeoff: 'The filtered ECG is easier to read and analyze, but overly aggressive cutoff frequencies can change QRS shape, ST segments, timing, and amplitude. The engineering goal is not a pretty curve; it is a reliable signal that still preserves medically meaningful information.',
+        }
+      : {
+          problem: 'Das rohe EKG enthaelt Basisliniendrift durch Bewegung und Atmung, hochfrequentes Muskelrauschen und 50-Hz-Netzstoerung. Bleiben diese Artefakte im Signal, werden R-Zacken-Erkennung und Herzfrequenzschaetzung unzuverlaessig.',
+          steps: [
+            'Basislinienkorrektur entfernt langsame Verschiebungen der gesamten Kurve.',
+            'Bandpassfilterung behaelt das EKG-Band und reduziert sehr langsame Drift sowie hochfrequentes Rauschen.',
+            'Ein 50-Hz-Kerbfilter reduziert Netzstoerung aus der elektrischen Umgebung.',
+            'R-Zacken-Erkennung identifiziert die dominanten Herzschlagspitzen und schaetzt die Herzfrequenz.',
+          ],
+          tradeoff: 'Das gefilterte EKG ist leichter lesbar und analysierbar, aber zu aggressive Grenzfrequenzen koennen QRS-Form, ST-Strecken, Timing und Amplitude veraendern. Das Ziel ist keine schoene Kurve, sondern ein verlaessliches Signal, das medizinisch sinnvolle Information erhaelt.',
+        };
+
+  const imaging =
+    lang === 'en'
+      ? {
+          problem: 'The original measurement has limited contrast, noise, blur, or artifacts, so relevant structures can be difficult to distinguish.',
+          steps: [
+            'Contrast mapping expands the useful intensity range.',
+            'Noise-aware smoothing reduces random variation while trying to preserve edges.',
+            'Sharpening or reconstruction kernels increase boundary visibility.',
+            'Windowing maps the data range to the display range for the chosen anatomy or material.',
+          ],
+          tradeoff: 'Image enhancement improves readability, but too much sharpening can create false edges and too much smoothing can remove small details. The result must support interpretation without inventing information.',
+        }
+      : {
+          problem: 'Die urspruengliche Messung hat begrenzten Kontrast, Rauschen, Unschaerfe oder Artefakte, sodass relevante Strukturen schwer unterscheidbar sind.',
+          steps: [
+            'Kontrastabbildung erweitert den nutzbaren Intensitaetsbereich.',
+            'Rauschbewusste Glaettung reduziert zufaellige Schwankungen und versucht Kanten zu erhalten.',
+            'Schaerfung oder Rekonstruktionskerne erhoehen die Sichtbarkeit von Grenzen.',
+            'Fensterung bildet den Datenbereich auf den Anzeigebereich fuer die gewaehlte Anatomie oder das Material ab.',
+          ],
+          tradeoff: 'Bildverbesserung erhoeht die Lesbarkeit, aber zu viel Schaerfung kann falsche Kanten erzeugen und zu viel Glaettung kleine Details entfernen. Das Ergebnis muss Interpretation unterstuetzen, ohne Information zu erfinden.',
+        };
+
+  if (model === 'ecg') {
+    return ecg;
+  }
+  if (['ct', 'xray', 'mri', 'ultrasound', 'endoscope'].includes(model)) {
+    return imaging;
+  }
+  return lang === 'en'
+    ? {
+        problem: 'Raw device data often contains sensor noise, drift, calibration error, and transient behavior from motors, pumps, valves, or patient movement.',
+        steps: [
+          'Calibration maps sensor voltage to a physical value.',
+          'Trend filtering separates meaningful change from random noise.',
+          'Threshold logic identifies unsafe values and possible sensor faults.',
+          'Control software updates the actuator or alarm state.',
+        ],
+        tradeoff: 'Filtering and control make the device more stable, but too much delay can hide dangerous events. The design balance is stability, responsiveness, and safety.',
+      }
+    : {
+        problem: 'Rohe Geraetedaten enthalten oft Sensorrauschen, Drift, Kalibrierfehler und Einschwingverhalten von Motoren, Pumpen, Ventilen oder Patientenbewegung.',
+        steps: [
+          'Kalibrierung bildet Sensorspannung auf eine physikalische Groesse ab.',
+          'Trendfilterung trennt sinnvolle Aenderung von zufaelligem Rauschen.',
+          'Schwellwertlogik erkennt unsichere Werte und moegliche Sensorfehler.',
+          'Steuersoftware aktualisiert Aktor- oder Alarmzustand.',
+        ],
+        tradeoff: 'Filterung und Regelung machen das Geraet stabiler, aber zu viel Verzoegerung kann gefaehrliche Ereignisse verdecken. Die Auslegung balanciert Stabilitaet, Reaktionsgeschwindigkeit und Sicherheit.',
+      };
 }
 
 function getElectroConcepts(model: string, lang: Lang) {

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import type { LearningDevice } from '../data/devices';
 
@@ -12,8 +12,10 @@ type PartMesh = THREE.Mesh & { userData: { partId?: string } };
 
 export default function DeviceModel({ device, selectedPartId, onSelectPart }: Props) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const [ready, setReady] = useState(false);
 
   useEffect(() => {
+    setReady(false);
     const canvas = canvasRef.current;
     if (!canvas) {
       return;
@@ -26,7 +28,9 @@ export default function DeviceModel({ device, selectedPartId, onSelectPart }: Pr
     scene.fog = new THREE.Fog(new THREE.Color(canvasColor), 9, 16);
 
     const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 100);
-    camera.position.set(5.4, 3.9, 7.2);
+    const initialCamera = new THREE.Vector3(0, 2.35, 7.2);
+    camera.position.copy(initialCamera);
+    camera.lookAt(0, 0, 0);
 
     const renderer = new THREE.WebGLRenderer({ canvas: activeCanvas, antialias: true });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -37,6 +41,7 @@ export default function DeviceModel({ device, selectedPartId, onSelectPart }: Pr
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
     const group = new THREE.Group();
+    group.scale.setScalar(1.18);
     scene.add(group);
 
     scene.add(new THREE.HemisphereLight(0xffffff, 0x64748b, 2.4));
@@ -57,8 +62,10 @@ export default function DeviceModel({ device, selectedPartId, onSelectPart }: Pr
     const pointer = new THREE.Vector2();
     let dragging = false;
     let lastX = 0;
+    let lastY = 0;
     let frame = 0;
     let animationId = 0;
+    let hasRendered = false;
 
     function resize() {
       const width = activeCanvas.clientWidth;
@@ -83,6 +90,7 @@ export default function DeviceModel({ device, selectedPartId, onSelectPart }: Pr
     function onPointerDown(event: PointerEvent) {
       dragging = true;
       lastX = event.clientX;
+      lastY = event.clientY;
       selectPart(event);
     }
 
@@ -91,15 +99,30 @@ export default function DeviceModel({ device, selectedPartId, onSelectPart }: Pr
         return;
       }
       group.rotation.y += (event.clientX - lastX) * 0.01;
+      group.rotation.x += (event.clientY - lastY) * 0.006;
+      group.rotation.x = THREE.MathUtils.clamp(group.rotation.x, -0.55, 0.55);
       lastX = event.clientX;
+      lastY = event.clientY;
     }
 
     function onPointerUp() {
       dragging = false;
     }
 
+    function onWheel(event: WheelEvent) {
+      event.preventDefault();
+      camera.position.z = THREE.MathUtils.clamp(camera.position.z + event.deltaY * 0.006, 4.4, 10.2);
+    }
+
+    function onDoubleClick() {
+      group.rotation.set(0, 0, 0);
+      camera.position.copy(initialCamera);
+    }
+
     activeCanvas.addEventListener('pointerdown', onPointerDown);
     activeCanvas.addEventListener('pointermove', onPointerMove);
+    activeCanvas.addEventListener('wheel', onWheel, { passive: false });
+    activeCanvas.addEventListener('dblclick', onDoubleClick);
     window.addEventListener('pointerup', onPointerUp);
     window.addEventListener('resize', resize);
 
@@ -112,7 +135,12 @@ export default function DeviceModel({ device, selectedPartId, onSelectPart }: Pr
         material.emissiveIntensity = isSelected ? 0.35 + Math.sin(frame * 0.08) * 0.08 : 0;
       }
       group.rotation.y += dragging ? 0 : 0.0018;
+      camera.lookAt(0, 0, 0);
       renderer.render(scene, camera);
+      if (!hasRendered) {
+        hasRendered = true;
+        setReady(true);
+      }
       animationId = requestAnimationFrame(animate);
     }
 
@@ -122,6 +150,8 @@ export default function DeviceModel({ device, selectedPartId, onSelectPart }: Pr
     return () => {
       activeCanvas.removeEventListener('pointerdown', onPointerDown);
       activeCanvas.removeEventListener('pointermove', onPointerMove);
+      activeCanvas.removeEventListener('wheel', onWheel);
+      activeCanvas.removeEventListener('dblclick', onDoubleClick);
       window.removeEventListener('pointerup', onPointerUp);
       window.removeEventListener('resize', resize);
       cancelAnimationFrame(animationId);
@@ -139,7 +169,17 @@ export default function DeviceModel({ device, selectedPartId, onSelectPart }: Pr
     };
   }, [device, onSelectPart, selectedPartId]);
 
-  return <canvas ref={canvasRef} className="device-canvas" aria-label="interactive 3D teaching model" />;
+  return (
+    <div className="model-stage">
+      {!ready && <div className="model-loading">Loading teaching model...</div>}
+      <canvas ref={canvasRef} className="device-canvas" aria-label="interactive 3D teaching model" />
+      <div className="model-tools" aria-hidden="true">
+        <span>Drag rotate</span>
+        <span>Wheel zoom</span>
+        <span>Double-click reset</span>
+      </div>
+    </div>
+  );
 }
 
 function mat(color: number, options: { metalness?: number; roughness?: number; opacity?: number; emissive?: number } = {}) {
@@ -219,13 +259,24 @@ function buildModel(device: LearningDevice, group: THREE.Group) {
   if (device.model === 'ecg') {
     add(group, parts, box('screen', 0x0f172a, [0, 1.05, -0.52], [2.25, 1.08, 0.12]));
     add(group, parts, box('screen', 0xdbeafe, [0, 0.02, 0], [2.85, 2.32, 0.8], 0.9));
-    add(group, parts, box('amplifier', 0x38bdf8, [-0.72, -0.25, -0.55], [0.62, 0.32, 0.16]));
-    add(group, parts, box('filter', 0x14b8a6, [0.04, -0.25, -0.55], [0.62, 0.32, 0.16]));
-    add(group, parts, box('adc', 0xf97316, [0.76, -0.25, -0.55], [0.46, 0.32, 0.16]));
+    add(group, parts, box('power', 0x64748b, [-1.07, -0.74, -0.55], [0.52, 0.22, 0.16]));
+    add(group, parts, box('protection', 0xef4444, [-1.02, -0.25, -0.55], [0.42, 0.28, 0.16]));
+    add(group, parts, box('isolation', 0xa855f7, [-0.56, -0.25, -0.55], [0.1, 0.52, 0.18], 0.82));
+    add(group, parts, box('amplifier', 0x38bdf8, [-0.2, -0.25, -0.55], [0.48, 0.32, 0.16]));
+    add(group, parts, box('cmrr', 0x22c55e, [0.26, -0.25, -0.55], [0.34, 0.28, 0.16]));
+    add(group, parts, box('highpass', 0x14b8a6, [0.66, -0.47, -0.55], [0.34, 0.2, 0.16]));
+    add(group, parts, box('lowpass', 0x0f766e, [0.66, -0.25, -0.55], [0.34, 0.2, 0.16]));
+    add(group, parts, box('notch', 0x0891b2, [0.66, -0.03, -0.55], [0.34, 0.2, 0.16]));
+    add(group, parts, box('adc', 0xf97316, [1.08, -0.25, -0.55], [0.34, 0.32, 0.16]));
+    add(group, parts, box('processor', 0xf59e0b, [1.08, -0.74, -0.55], [0.46, 0.22, 0.16]));
+    add(group, parts, box('alarm', 0xe11d48, [1.05, 0.65, -0.55], [0.34, 0.18, 0.16]));
+    add(group, parts, cyl('drl', 0x8b5cf6, [-1.22, -1.02, 0.34], 0.14, 0.1, 'z'));
     add(group, parts, tube('leads', 0x475569, [[1.22, -0.55, -0.18], [1.75, -0.95, 0.18], [2.35, -1.15, 0.05]], 0.04));
     add(group, parts, tube('leads', 0x475569, [[1.18, -0.46, -0.2], [1.7, -0.35, 0.2], [2.25, -0.7, 0.45]], 0.032));
     add(group, parts, cyl('electrodes', 0xef4444, [2.45, -1.18, 0.05], 0.22, 0.08, 'z'));
     add(group, parts, cyl('electrodes', 0xf97316, [2.35, -0.7, 0.45], 0.18, 0.07, 'z'));
+    add(group, parts, cyl('skinInterface', 0xfca5a5, [2.45, -1.26, 0.05], 0.28, 0.035, 'z', 0.56));
+    add(group, parts, cyl('skinInterface', 0xfdba74, [2.35, -0.78, 0.45], 0.23, 0.035, 'z', 0.56));
   } else if (device.model === 'ct') {
     add(group, parts, torus('gantry', 0xcbd5e1, [0, 0.35, 0], 1.55, 0.32));
     add(group, parts, torus('detectors', 0x38bdf8, [0, 0.35, 0.04], 1.12, 0.08, 0.82));
