@@ -143,7 +143,7 @@ export default function DeviceExplorer({ lang }: Props) {
     {
       id: 'model',
       icon: <Rotate3D size={18} />,
-      label: lang === 'en' ? '3D model + explanation' : '3D-Modell + Erklaerung',
+      label: lang === 'en' ? 'Machine picture + parts' : 'Geraetebild + Teile',
       short: lang === 'en' ? 'parts' : 'Teile',
     },
     {
@@ -211,7 +211,7 @@ export default function DeviceExplorer({ lang }: Props) {
               <div className="model-panel pro-model-panel">
                 <div className="section-title">
                   <div>
-                    <p className="label">{lang === 'en' ? 'Interactive professional teaching model' : 'Interaktives professionelles Lernmodell'}</p>
+                    <p className="label">{lang === 'en' ? 'Clear labeled machine picture' : 'Klares beschriftetes Geraetebild'}</p>
                     <h2>{t(device.name, lang)}</h2>
                   </div>
                   <Rotate3D size={24} />
@@ -219,8 +219,8 @@ export default function DeviceExplorer({ lang }: Props) {
                 <DeviceModel device={device} selectedPartId={selectedPart?.id || ''} onSelectPart={setSelectedPartId} />
                 <p className="canvas-hint">
                   {lang === 'en'
-                    ? 'Drag to rotate. Click a part or choose it from the list. The models are custom procedural 3D assets, so they stay free to use and deploy.'
-                    : 'Ziehen zum Drehen. Teil anklicken oder aus der Liste waehlen. Die Modelle sind eigene prozedurale 3D-Assets und bleiben kostenlos nutzbar.'}
+                    ? 'Click a label on the machine picture or choose a component from the list to read the engineering explanation.'
+                    : 'Klicke eine Beschriftung im Geraetebild oder waehle ein Bauteil aus der Liste, um die technische Erklaerung zu lesen.'}
                 </p>
               </div>
 
