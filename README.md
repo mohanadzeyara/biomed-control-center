@@ -14,6 +14,10 @@ Main learning sections:
 - X-ray System
 - MRI Scanner
 - Infusion Pump
+- Ventilator
+- Defibrillator
+- Hemodialysis Machine
+- Video Endoscope
 
 Each device section includes:
 
@@ -26,6 +30,7 @@ Each device section includes:
 - Animated teaching clips showing the device workflow
 - A signal or image processing demonstration
 - Workflow explanation from acquisition to display
+- Engineering Deep Dive cards covering sensors, analog front ends, high-voltage electronics, magnetic fields, RF coils, gradients, reconstruction, control loops, and filtering
 - Educational safety wording, with no diagnosis claims
 
 Phase 1 includes:

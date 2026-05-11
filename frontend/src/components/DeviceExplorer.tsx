@@ -153,6 +153,26 @@ export default function DeviceExplorer({ lang }: Props) {
 
       <ProcessDemo device={device} demo={device.demo} lang={lang} />
 
+      {device.deepDive && (
+        <section className="deep-dive">
+          <div className="section-title">
+            <div>
+              <p className="label">{lang === 'en' ? 'Engineering deep dive' : 'Technischer Deep Dive'}</p>
+              <h2>{lang === 'en' ? 'Signal, field, and processing path' : 'Signal-, Feld- und Verarbeitungspfad'}</h2>
+            </div>
+            <CircuitBoard size={24} />
+          </div>
+          <div className="deep-dive-grid">
+            {device.deepDive.map((section) => (
+              <article key={t(section.title, 'en')}>
+                <h3>{t(section.title, lang)}</h3>
+                <p>{t(section.body, lang)}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+      )}
+
       {device.id === 'ecg' && <EcgPanel />}
     </>
   );
