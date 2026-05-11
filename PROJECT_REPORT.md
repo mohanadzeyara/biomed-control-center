@@ -132,3 +132,24 @@ Changes added in this pass:
 Design direction after this pass:
 
 The ECG monitor is still the flagship page. It should feel like a product/story page first, then a study lab second: real hero image, highlights, signal chain, close-up engineering explanations, mini report, dedicated ECG lab, and finally the normal reusable device categories.
+
+## 2026-05-11 Claude Feedback Implementation Pass
+
+After reviewing external feedback, the next pass focused on closing the gap between strong educational content and weaker visual presentation.
+
+Updates added:
+
+- Added a stronger typography system: Syne for headings and DM Sans for body/UI text.
+- Added real medical-device thumbnails to every homepage card so users see the machine before opening the page.
+- Replaced the main device image sources with direct `upload.wikimedia.org` media URLs instead of `Special:FilePath` redirects.
+- Added pulsing hotspot dots and a visible "tap a label" instruction so the photo interaction is easier to discover.
+- Added `aria-label` text to key interactive controls such as hotspots, study tabs, and process playback buttons.
+- Introduced design tokens for accent colors, card shadows, and sticky header offset to make light/dark mode and sticky tabs more consistent.
+- Improved the homepage card visual hierarchy with taller photo-led cards, hover lift, and clearer premium product-page styling.
+
+Remaining good next steps:
+
+- Split `devices.ts` into per-device content files.
+- Extract ECG story sections out of `DeviceExplorer.tsx`.
+- Replace the homepage storyboard with a richer animated walkthrough.
+- Continue removing hardcoded colors from older dashboard styles.

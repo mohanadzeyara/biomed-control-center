@@ -10,6 +10,14 @@ echo - Moved the ECG analysis lab into its own ECG-only section.
 echo - Updated README and PROJECT_REPORT without deleting previous notes.
 echo - Rebuilt GitHub Pages output with /biomed-control-center/ asset paths.
 echo.
+echo Claude feedback implementation pass:
+echo - Added Syne/DM Sans typography.
+echo - Added real device photo thumbnails to homepage cards.
+echo - Switched main device photos to upload.wikimedia.org URLs.
+echo - Added pulsing hotspot indicators and tap/click guidance.
+echo - Added aria-labels to key device explorer controls.
+echo - Improved card hierarchy, hover states, sticky offsets, and visual polish.
+echo.
 echo Repository:
 echo https://github.com/mohanadzeyara/biomed-control-center
 echo Live page:

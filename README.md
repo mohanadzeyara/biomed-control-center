@@ -37,6 +37,10 @@ Latest design pass:
 
 - Reduced the wide side margins so the page uses more of the screen.
 - Replaced the drawn/animated device visuals with realistic machine photos and clickable labels.
+- Resolved the main device images to direct `upload.wikimedia.org` media URLs.
+- Added real device thumbnails directly to the homepage cards.
+- Added a stronger Google Font system with Syne headings and DM Sans body text.
+- Added pulsing hotspot indicators and clearer tap/click guidance on device photos.
 - Kept the ECG page categories: machine photo + parts, how it works, before/after results, and GET 1/2.
 - Moved the ECG analysis lab into a dedicated ECG-only section so it does not feel mixed into every device.
 - Pushed the ECG page closer to a Samsung-style product story with a real visual hero, highlights, close-up sections, signal chain, mini report, and then the normal study tabs.

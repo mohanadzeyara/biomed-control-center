@@ -21,7 +21,7 @@ import {
   Wrench,
   Zap,
 } from 'lucide-react';
-import DeviceModel from './DeviceModel';
+import DeviceModel, { getDevicePhoto } from './DeviceModel';
 import { learningDevices, t, type Lang } from '../data/devices';
 import EcgPanel from './EcgPanel';
 
@@ -118,8 +118,20 @@ export default function DeviceExplorer({ lang }: Props) {
         <section className="device-library page-library">
           {learningDevices.map((item, index) => {
             const preview = getCardPreview(item.model, lang);
+            const photo = getDevicePhoto(item.model);
             return (
             <a key={item.id} className="library-card" href={`#/device/${item.id}`}>
+              <div className="card-photo">
+                <img
+                  src={photo.src}
+                  alt={photo.alt}
+                  onError={(event) => {
+                    if (event.currentTarget.src !== photo.fallback) {
+                      event.currentTarget.src = photo.fallback;
+                    }
+                  }}
+                />
+              </div>
               <div className="card-topline">
                 <span>{t(item.category, lang)}</span>
                 <em>{index % 3 === 1 ? (lang === 'en' ? 'Study' : 'Studium') : lang === 'en' ? 'Active' : 'Aktiv'}</em>
@@ -213,6 +225,7 @@ export default function DeviceExplorer({ lang }: Props) {
               aria-selected={activeTab === tab.id}
               className={activeTab === tab.id ? 'active' : ''}
               onClick={() => setActiveTab(tab.id)}
+              aria-label={tab.label}
               title={tab.label}
             >
               {tab.icon}
@@ -309,11 +322,11 @@ export default function DeviceExplorer({ lang }: Props) {
                 <h2>{t(device.demo.title, lang)}</h2>
               </div>
               <div className="process-controls">
-                <button type="button" onClick={() => setProcessPlaying(!processPlaying)}>
+                <button type="button" onClick={() => setProcessPlaying(!processPlaying)} aria-label={processPlaying ? 'Pause process walkthrough' : 'Play process walkthrough'}>
                   {processPlaying ? <Pause size={16} /> : <Play size={16} />}
                   {processPlaying ? (lang === 'en' ? 'Pause' : 'Pause') : (lang === 'en' ? 'Play' : 'Start')}
                 </button>
-                <button type="button" onClick={() => setProcessStep(0)}>
+                <button type="button" onClick={() => setProcessStep(0)} aria-label="Restart process walkthrough">
                   <RotateCcw size={16} />
                   {lang === 'en' ? 'Restart' : 'Neu starten'}
                 </button>
@@ -465,7 +478,7 @@ function EcgFlagshipProfile({ lang }: { lang: Lang }) {
       <div className="flagship-visual">
         <img
           className="flagship-photo"
-          src="https://commons.wikimedia.org/wiki/Special:FilePath/Patient%20lying%20in%20hospital%20bed%20in%20intensive%20care%20unit%20in%20Germany%20in%202015.jpg"
+          src="https://upload.wikimedia.org/wikipedia/commons/5/53/Patient_lying_in_hospital_bed_in_intensive_care_unit_in_Germany_in_2015.jpg"
           alt="Real intensive care ECG monitor and patient monitoring equipment"
         />
         <div className="device-status-overlay">

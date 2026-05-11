@@ -21,9 +21,9 @@ type DevicePhoto = {
 };
 
 const fallbackPhoto =
-  'https://commons.wikimedia.org/wiki/Special:FilePath/Patient%20lying%20in%20hospital%20bed%20in%20intensive%20care%20unit%20in%20Germany%20in%202015.jpg';
+  'https://upload.wikimedia.org/wikipedia/commons/5/53/Patient_lying_in_hospital_bed_in_intensive_care_unit_in_Germany_in_2015.jpg';
 
-const devicePhotos: Record<LearningDevice['model'], DevicePhoto> = {
+export const devicePhotos: Record<LearningDevice['model'], DevicePhoto> = {
   ecg: {
     src: fallbackPhoto,
     fallback: fallbackPhoto,
@@ -31,60 +31,64 @@ const devicePhotos: Record<LearningDevice['model'], DevicePhoto> = {
     position: 'center',
   },
   ct: {
-    src: 'https://commons.wikimedia.org/wiki/Special:FilePath/Siemens%20Somatom%20CT%20scanner.jpg',
+    src: 'https://upload.wikimedia.org/wikipedia/commons/1/1a/Siemens_Somatom_CT_scanner.jpg',
     fallback: fallbackPhoto,
     alt: 'Real CT scanner in a clinical room',
     position: 'center',
   },
   ultrasound: {
-    src: 'https://commons.wikimedia.org/wiki/Special:FilePath/A%20modern%20medical%20ultrasound%20scanner.jpg',
+    src: 'https://upload.wikimedia.org/wikipedia/commons/e/e4/A_modern_medical_ultrasound_scanner.jpg',
     fallback: fallbackPhoto,
     alt: 'Real ultrasound machine with screen and probe',
     position: 'center',
   },
   xray: {
-    src: 'https://commons.wikimedia.org/wiki/Special:FilePath/Xraymachine.JPG',
+    src: 'https://upload.wikimedia.org/wikipedia/commons/0/0a/Xraymachine.JPG',
     fallback: fallbackPhoto,
     alt: 'Real portable X-ray machine beside a patient bed',
     position: 'center',
   },
   mri: {
-    src: 'https://commons.wikimedia.org/wiki/Special:FilePath/Modern%203T%20MRI.JPG',
+    src: 'https://upload.wikimedia.org/wikipedia/commons/b/bd/Modern_3T_MRI.JPG',
     fallback: fallbackPhoto,
     alt: 'Real modern MRI scanner',
     position: 'center',
   },
   pump: {
-    src: 'https://commons.wikimedia.org/wiki/Special:FilePath/Infuuspomp.jpg',
+    src: 'https://upload.wikimedia.org/wikipedia/commons/d/dc/Infuuspomp.jpg',
     fallback: fallbackPhoto,
     alt: 'Real infusion pump mounted in a clinical setting',
     position: 'center',
   },
   ventilator: {
-    src: 'https://commons.wikimedia.org/wiki/Special:FilePath/Respirator%20icu.JPG',
+    src: 'https://upload.wikimedia.org/wikipedia/commons/d/de/Respirator_icu.JPG',
     fallback: fallbackPhoto,
     alt: 'Real mechanical ventilator system',
     position: 'center',
   },
   defib: {
-    src: 'https://commons.wikimedia.org/wiki/Special:FilePath/Defibrillateur%201.jpg',
+    src: 'https://upload.wikimedia.org/wikipedia/commons/f/f3/Defibrillateur_1.jpg',
     fallback: fallbackPhoto,
     alt: 'Real automated external defibrillator cabinet',
     position: 'center',
   },
   dialysis: {
-    src: 'https://commons.wikimedia.org/wiki/Special:FilePath/Dialysis%20machine.jpg',
+    src: 'https://upload.wikimedia.org/wikipedia/commons/2/20/Dialysis_machine.jpg',
     fallback: fallbackPhoto,
     alt: 'Real hemodialysis machine near an intensive care bed',
     position: 'center',
   },
   endoscope: {
-    src: 'https://commons.wikimedia.org/wiki/Special:FilePath/Rigid%20endoscope.jpg',
+    src: 'https://upload.wikimedia.org/wikipedia/commons/d/d7/Rigid_endoscope.jpg',
     fallback: fallbackPhoto,
     alt: 'Real flexible medical endoscope',
     position: 'center',
   },
 };
+
+export function getDevicePhoto(model: LearningDevice['model']) {
+  return devicePhotos[model];
+}
 
 const hotspots: Record<LearningDevice['model'], Hotspot[]> = {
   ecg: [
@@ -187,6 +191,10 @@ export default function DeviceModel({ device, selectedPartId, onSelectPart }: Pr
           }}
         />
       </div>
+      <div className="hotspot-instruction">
+        <span />
+        <strong>Tap a label to inspect the part</strong>
+      </div>
       <div className="picture-hotspots">
         {deviceHotspots.map((spot) => {
           const part = device.parts.find((item) => item.id === spot.partId);
@@ -199,6 +207,7 @@ export default function DeviceModel({ device, selectedPartId, onSelectPart }: Pr
               className={selectedPartId === spot.partId ? 'active' : ''}
               style={{ left: `${spot.x}%`, top: `${spot.y}%` }}
               onClick={() => onSelectPart(spot.partId)}
+              aria-label={`Inspect ${t(part.name, 'en')}`}
               title={t(part.name, 'en')}
             >
               <span />
