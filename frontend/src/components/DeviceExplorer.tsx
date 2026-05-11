@@ -1,5 +1,24 @@
 import { useEffect, useMemo, useState } from 'react';
-import { ArrowLeft, BookOpen, Box, CircuitBoard, Film, GraduationCap, Image, Layers, MonitorDot, Rotate3D, Zap } from 'lucide-react';
+import {
+  Activity,
+  ArrowLeft,
+  BookOpen,
+  Box,
+  CircuitBoard,
+  FileText,
+  Film,
+  Gauge,
+  GraduationCap,
+  Image,
+  Layers,
+  MonitorDot,
+  Play,
+  Rotate3D,
+  ShieldCheck,
+  Stethoscope,
+  Wrench,
+  Zap,
+} from 'lucide-react';
 import DeviceModel from './DeviceModel';
 import { learningDevices, t, type Lang } from '../data/devices';
 import EcgPanel from './EcgPanel';
@@ -56,14 +75,49 @@ export default function DeviceExplorer({ lang }: Props) {
           </div>
         </section>
 
+        <section className="homepage-demo">
+          <div className="demo-copy">
+            <p className="label">{lang === 'en' ? 'Project demo' : 'Projekt-Demo'}</p>
+            <h2>{lang === 'en' ? 'How to use the platform' : 'So benutzt man die Plattform'}</h2>
+            <p>
+              {lang === 'en'
+                ? 'Pick a device card, open its device profile, inspect the model, follow the short process clip, compare simulated before/after data, and connect the device to GET 1/2 electrotechnics.'
+                : 'Waehle eine Geraetekarte, oeffne das Geraeteprofil, pruefe das Modell, folge dem kurzen Prozessclip, vergleiche simulierte Vorher/Nachher-Daten und verbinde das Geraet mit GET 1/2 Elektrotechnik.'}
+            </p>
+          </div>
+          <div className="video-storyboard" aria-label={lang === 'en' ? 'Animated project explainer' : 'Animierte Projekt-Erklaerung'}>
+            {(lang === 'en'
+              ? ['Choose device', 'Inspect parts', 'Read signals', 'Connect GET theory']
+              : ['Geraet waehlen', 'Teile pruefen', 'Signale lesen', 'GET-Bezug herstellen']
+            ).map((step, index) => (
+              <div className="story-frame" key={step}>
+                <span>{index + 1}</span>
+                <strong>{step}</strong>
+              </div>
+            ))}
+            <Play className="story-play" size={34} />
+          </div>
+        </section>
+
         <section className="device-library page-library">
-          {learningDevices.map((item) => (
+          {learningDevices.map((item, index) => {
+            const preview = getCardPreview(item.model, lang);
+            return (
             <a key={item.id} className="library-card" href={`#/device/${item.id}`}>
-              <span>{t(item.category, lang)}</span>
+              <div className="card-topline">
+                <span>{t(item.category, lang)}</span>
+                <em>{index % 3 === 1 ? (lang === 'en' ? 'Study' : 'Studium') : lang === 'en' ? 'Active' : 'Aktiv'}</em>
+              </div>
               <strong>{t(item.name, lang)}</strong>
               <small>{t(item.short, lang)}</small>
+              <div className="card-preview">
+                <preview.icon size={18} />
+                <b>{preview.value}</b>
+                <span>{preview.label}</span>
+              </div>
+              <span className="explore-cta">{lang === 'en' ? 'Explore device' : 'Geraet erkunden'}</span>
             </a>
-          ))}
+          )})}
         </section>
       </>
     );
@@ -111,6 +165,8 @@ export default function DeviceExplorer({ lang }: Props) {
           <p>{t(device.overview, lang)}</p>
         </div>
       </section>
+
+      {device.id === 'ecg' && <EcgFlagshipProfile lang={lang} />}
 
       <section className="study-shell">
         <div className="study-tabs" role="tablist" aria-label={lang === 'en' ? 'Device study sections' : 'Geraete-Lernbereiche'}>
@@ -308,6 +364,108 @@ export default function DeviceExplorer({ lang }: Props) {
       {device.id === 'ecg' && <EcgPanel />}
     </>
   );
+}
+
+function EcgFlagshipProfile({ lang }: { lang: Lang }) {
+  const specs =
+    lang === 'en'
+      ? [
+          ['Measured signal', '0.5-4 mV skin potential'],
+          ['Useful bandwidth', '0.05-150 Hz ECG band'],
+          ['Sampling idea', 'ADC after anti-alias filtering'],
+          ['Noise focus', '50 Hz mains, muscle noise, drift'],
+        ]
+      : [
+          ['Messsignal', '0.5-4 mV Hautpotential'],
+          ['Nutzband', '0.05-150 Hz EKG-Band'],
+          ['Abtastidee', 'ADC nach Anti-Alias-Filter'],
+          ['Stoerfokus', '50 Hz Netz, Muskelrauschen, Drift'],
+        ];
+  const actions =
+    lang === 'en'
+      ? [
+          { icon: <Activity size={18} />, label: 'Analyze ECG signal' },
+          { icon: <FileText size={18} />, label: 'Generate report' },
+          { icon: <Gauge size={18} />, label: 'View sensor data' },
+          { icon: <Wrench size={18} />, label: 'Maintenance log' },
+        ]
+      : [
+          { icon: <Activity size={18} />, label: 'EKG-Signal analysieren' },
+          { icon: <FileText size={18} />, label: 'Bericht erzeugen' },
+          { icon: <Gauge size={18} />, label: 'Sensordaten ansehen' },
+          { icon: <Wrench size={18} />, label: 'Wartungslog' },
+        ];
+
+  return (
+    <section className="flagship-profile">
+      <div className="flagship-visual">
+        <div className="ecg-product">
+          <div className="ecg-screen">
+            <span>HR 72</span>
+            <div className="ecg-wave" />
+          </div>
+          <div className="ecg-controls-visual">
+            <i />
+            <i />
+            <i />
+          </div>
+          <div className="ecg-leads-visual">
+            <b />
+            <b />
+            <b />
+          </div>
+        </div>
+        <div className="device-status-overlay">
+          <strong>{lang === 'en' ? 'Device status' : 'Geraetestatus'}</strong>
+          <span><ShieldCheck size={16} /> {lang === 'en' ? 'Active simulation' : 'Aktive Simulation'}</span>
+          <span><Zap size={16} /> {lang === 'en' ? 'Signal quality stable' : 'Signalqualitaet stabil'}</span>
+        </div>
+      </div>
+
+      <div className="flagship-copy">
+        <p className="label">{lang === 'en' ? 'Flagship device profile' : 'Flagship-Geraeteprofil'}</p>
+        <h2>{lang === 'en' ? 'ECG monitor as a complete engineering system' : 'EKG-Monitor als komplettes technisches System'}</h2>
+        <p>
+          {lang === 'en'
+            ? 'This page is the polished template for the rest of the project: product-style visual, clickable components, simulated ECG signal, device status, technical specs, study explanation, and report actions.'
+            : 'Diese Seite ist die polierte Vorlage fuer den Rest des Projekts: Produktvisual, anklickbare Komponenten, simuliertes EKG-Signal, Geraetestatus, technische Daten, Studienerklaerung und Bericht-Aktionen.'}
+        </p>
+        <div className="spec-grid">
+          {specs.map(([label, value]) => (
+            <article key={label}>
+              <span>{label}</span>
+              <strong>{value}</strong>
+            </article>
+          ))}
+        </div>
+        <div className="action-row">
+          {actions.map((action) => (
+            <button type="button" key={action.label}>
+              {action.icon}
+              {action.label}
+            </button>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function getCardPreview(model: string, lang: Lang) {
+  const previews: Record<string, { icon: typeof Activity; value: string; label: string }> = {
+    ecg: { icon: Activity, value: '72 bpm', label: lang === 'en' ? 'heart-rate demo' : 'Herzfrequenz-Demo' },
+    ct: { icon: Image, value: '128 slices', label: lang === 'en' ? 'image stack' : 'Bildstapel' },
+    ultrasound: { icon: Stethoscope, value: '5 MHz', label: lang === 'en' ? 'probe frequency' : 'Sondenfrequenz' },
+    xray: { icon: Zap, value: '70 kVp', label: lang === 'en' ? 'exposure demo' : 'Belichtungsdemo' },
+    mri: { icon: CircuitBoard, value: 'RF coil', label: lang === 'en' ? 'resonance focus' : 'Resonanzfokus' },
+    pump: { icon: Gauge, value: '24 ml/h', label: lang === 'en' ? 'flow simulation' : 'Flow-Simulation' },
+    ventilator: { icon: Gauge, value: 'PEEP 5', label: lang === 'en' ? 'pressure control' : 'Druckregelung' },
+    defib: { icon: Zap, value: '150 J', label: lang === 'en' ? 'energy storage' : 'Energiespeicher' },
+    dialysis: { icon: Activity, value: '250 ml/min', label: lang === 'en' ? 'blood-flow demo' : 'Blutfluss-Demo' },
+    endoscope: { icon: Image, value: 'HD sensor', label: lang === 'en' ? 'optical chain' : 'Optikkette' },
+  };
+
+  return previews[model] || { icon: Box, value: 'GET', label: lang === 'en' ? 'study link' : 'Studienbezug' };
 }
 
 function getElectroConcepts(model: string, lang: Lang) {
