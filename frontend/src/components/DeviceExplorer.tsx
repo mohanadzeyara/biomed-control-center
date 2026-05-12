@@ -121,23 +121,24 @@ export default function DeviceExplorer({ lang }: Props) {
             const photo = getDevicePhoto(item.model);
             return (
             <a key={item.id} className="library-card" href={`#/device/${item.id}`}>
-              <div className="card-photo">
+              <div className="card-thumb">
                 <img
-                  src={photo.src}
+                  src={photo.thumb}
                   alt={photo.alt}
+                  loading="lazy"
                   onError={(event) => {
-                    if (event.currentTarget.src !== photo.fallback) {
-                      event.currentTarget.src = photo.fallback;
+                    if (event.currentTarget.src !== photo.thumb) {
+                      event.currentTarget.src = photo.thumb;
                     }
                   }}
                 />
+                <span className="card-badge">{t(item.category, lang)}</span>
+                <span className="card-status">{index % 3 === 1 ? (lang === 'en' ? 'Study' : 'Studium') : lang === 'en' ? 'Active' : 'Aktiv'}</span>
               </div>
-              <div className="card-topline">
-                <span>{t(item.category, lang)}</span>
-                <em>{index % 3 === 1 ? (lang === 'en' ? 'Study' : 'Studium') : lang === 'en' ? 'Active' : 'Aktiv'}</em>
+              <div className="card-body">
+                <strong>{t(item.name, lang)}</strong>
+                <small>{t(item.short, lang)}</small>
               </div>
-              <strong>{t(item.name, lang)}</strong>
-              <small>{t(item.short, lang)}</small>
               <div className="card-preview">
                 <preview.icon size={18} />
                 <b>{preview.value}</b>

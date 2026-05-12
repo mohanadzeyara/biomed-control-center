@@ -153,3 +153,21 @@ Remaining good next steps:
 - Extract ECG story sections out of `DeviceExplorer.tsx`.
 - Replace the homepage storyboard with a richer animated walkthrough.
 - Continue removing hardcoded colors from older dashboard styles.
+
+## 2026-05-12 Claude Zip Review Pass
+
+The `medtech-improved.zip` file from Claude was unpacked and compared against the current repository. It was a full source copy rather than a small patch, so the update was not applied wholesale. The useful visual pieces were cherry-picked while preserving existing fixes such as valid image URLs, accessibility labels, and the current deployment workflow.
+
+Accepted from the Claude zip:
+
+- Homepage device cards now use a stronger photo-led structure with overlay category/status badges.
+- Cards use smaller verified Wikimedia thumbnail URLs instead of full-size images, improving initial page weight.
+- Card body text is grouped more cleanly, with the device name and description separated from preview metrics.
+- The existing accessibility labels and direct full-size image URLs were kept rather than regressed.
+
+Rejected or avoided from the Claude zip:
+
+- Guessed Wikimedia thumbnail paths with incorrect hash folders.
+- Inline styles for hotspot hints.
+- Removal of aria labels on tabs, hotspots, and process controls.
+- A full `styles.css` replacement that would have overwritten older dashboard and report styles.

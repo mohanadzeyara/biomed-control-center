@@ -41,6 +41,7 @@ Latest design pass:
 - Added real device thumbnails directly to the homepage cards.
 - Added a stronger Google Font system with Syne headings and DM Sans body text.
 - Added pulsing hotspot indicators and clearer tap/click guidance on device photos.
+- Reviewed Claude's `medtech-improved.zip` and cherry-picked the stronger homepage photo-card layout with verified 500px thumbnails.
 - Kept the ECG page categories: machine photo + parts, how it works, before/after results, and GET 1/2.
 - Moved the ECG analysis lab into a dedicated ECG-only section so it does not feel mixed into every device.
 - Pushed the ECG page closer to a Samsung-style product story with a real visual hero, highlights, close-up sections, signal chain, mini report, and then the normal study tabs.

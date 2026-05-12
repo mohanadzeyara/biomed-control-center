@@ -15,6 +15,7 @@ type Hotspot = {
 
 type DevicePhoto = {
   src: string;
+  thumb: string;
   fallback: string;
   alt: string;
   position?: string;
@@ -22,64 +23,76 @@ type DevicePhoto = {
 
 const fallbackPhoto =
   'https://upload.wikimedia.org/wikipedia/commons/5/53/Patient_lying_in_hospital_bed_in_intensive_care_unit_in_Germany_in_2015.jpg';
+const fallbackThumb =
+  'https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Patient_lying_in_hospital_bed_in_intensive_care_unit_in_Germany_in_2015.jpg/500px-Patient_lying_in_hospital_bed_in_intensive_care_unit_in_Germany_in_2015.jpg';
 
 export const devicePhotos: Record<LearningDevice['model'], DevicePhoto> = {
   ecg: {
     src: fallbackPhoto,
+    thumb: fallbackThumb,
     fallback: fallbackPhoto,
     alt: 'Real intensive care monitor beside a hospital bed',
     position: 'center',
   },
   ct: {
     src: 'https://upload.wikimedia.org/wikipedia/commons/1/1a/Siemens_Somatom_CT_scanner.jpg',
+    thumb: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Siemens_Somatom_CT_scanner.jpg/500px-Siemens_Somatom_CT_scanner.jpg',
     fallback: fallbackPhoto,
     alt: 'Real CT scanner in a clinical room',
     position: 'center',
   },
   ultrasound: {
     src: 'https://upload.wikimedia.org/wikipedia/commons/e/e4/A_modern_medical_ultrasound_scanner.jpg',
+    thumb: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/A_modern_medical_ultrasound_scanner.jpg/500px-A_modern_medical_ultrasound_scanner.jpg',
     fallback: fallbackPhoto,
     alt: 'Real ultrasound machine with screen and probe',
     position: 'center',
   },
   xray: {
     src: 'https://upload.wikimedia.org/wikipedia/commons/0/0a/Xraymachine.JPG',
+    thumb: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/Xraymachine.JPG/500px-Xraymachine.JPG',
     fallback: fallbackPhoto,
     alt: 'Real portable X-ray machine beside a patient bed',
     position: 'center',
   },
   mri: {
     src: 'https://upload.wikimedia.org/wikipedia/commons/b/bd/Modern_3T_MRI.JPG',
+    thumb: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/Modern_3T_MRI.JPG/500px-Modern_3T_MRI.JPG',
     fallback: fallbackPhoto,
     alt: 'Real modern MRI scanner',
     position: 'center',
   },
   pump: {
     src: 'https://upload.wikimedia.org/wikipedia/commons/d/dc/Infuuspomp.jpg',
+    thumb: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/Infuuspomp.jpg/500px-Infuuspomp.jpg',
     fallback: fallbackPhoto,
     alt: 'Real infusion pump mounted in a clinical setting',
     position: 'center',
   },
   ventilator: {
     src: 'https://upload.wikimedia.org/wikipedia/commons/d/de/Respirator_icu.JPG',
+    thumb: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/Respirator_icu.JPG/500px-Respirator_icu.JPG',
     fallback: fallbackPhoto,
     alt: 'Real mechanical ventilator system',
     position: 'center',
   },
   defib: {
     src: 'https://upload.wikimedia.org/wikipedia/commons/f/f3/Defibrillateur_1.jpg',
+    thumb: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Defibrillateur_1.jpg/500px-Defibrillateur_1.jpg',
     fallback: fallbackPhoto,
     alt: 'Real automated external defibrillator cabinet',
     position: 'center',
   },
   dialysis: {
     src: 'https://upload.wikimedia.org/wikipedia/commons/2/20/Dialysis_machine.jpg',
+    thumb: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Dialysis_machine.jpg/500px-Dialysis_machine.jpg',
     fallback: fallbackPhoto,
     alt: 'Real hemodialysis machine near an intensive care bed',
     position: 'center',
   },
   endoscope: {
     src: 'https://upload.wikimedia.org/wikipedia/commons/d/d7/Rigid_endoscope.jpg',
+    thumb: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Rigid_endoscope.jpg/500px-Rigid_endoscope.jpg',
     fallback: fallbackPhoto,
     alt: 'Real flexible medical endoscope',
     position: 'center',
